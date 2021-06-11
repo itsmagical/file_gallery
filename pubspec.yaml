@@ -34,7 +34,8 @@ dependencies:
   # 基本组件
   common:
     git:
-      url: git@github.com:yy1234/common.git
+      url: https://github.com/yy1234/common.git
+#      url: git@github.com:yy1234/common.git
       ref: main
 
 dev_dependencies:
