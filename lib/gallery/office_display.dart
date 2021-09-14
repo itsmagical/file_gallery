@@ -89,7 +89,7 @@ class _OfficeDisplayState extends State<OfficeDisplay> {
     if (!isExists) {
       directory.createSync();
     }
-    Network.instance.dio.download(url, target)
+    Network(baseUrl: '').dio.download(url, target)
     .then((response) async {
       File file = await getFileFromStorage();
       if (await file.exists()) {

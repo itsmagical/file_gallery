@@ -34,9 +34,10 @@ dependencies:
   # 基本组件
   common:
     git:
-      url: https://github.com/yy1234/common.git
+      url: git@github.com:itsmagical/common.git
+#      url: https://github.com/yy1234/common.git
 #      url: git@github.com:yy1234/common.git
-      ref: main
+#      ref: main
 
 dev_dependencies:
   flutter_test:
