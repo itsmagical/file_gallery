@@ -1,12 +1,9 @@
-import 'dart:io';
 
-import 'package:file_gallery/images/file_gallery_images.dart';
+import 'package:file_gallery/thumbnail_grid/item_image_thumbnail.dart';
+import 'package:file_gallery/thumbnail_grid/item_office_thumbnail.dart';
+import 'package:file_gallery/thumbnail_grid/item_video_thumbnail.dart';
 import 'package:file_gallery/util/file_type_util.dart';
 import 'package:flutter/material.dart';
-
-import 'item_image_thumbnail.dart';
-import 'item_office_thumbnail.dart';
-import 'item_video_thumbnail.dart';
 
 
 /// 图片、视频、Office 缩略图grid

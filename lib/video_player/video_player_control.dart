@@ -2,12 +2,11 @@ import 'dart:async';
 
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:file_gallery/images/file_gallery_images.dart';
+import 'package:file_gallery/video_player/video_share_widget.dart';
+import 'package:file_gallery/video_player/video_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
-
-import 'video_share_widget.dart';
-import 'video_util.dart';
 
 
 /// 视频播放器 控制层widget

@@ -1,9 +1,8 @@
 
+import 'package:file_gallery/upload/item_image_upload.dart';
+import 'package:file_gallery/upload/item_video_upload.dart';
 import 'package:file_gallery/util/file_type_util.dart';
 import 'package:flutter/material.dart';
-
-import 'item_image_upload.dart';
-import 'item_video_upload.dart';
 
 
 class FileUploadItem {

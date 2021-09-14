@@ -1,10 +1,10 @@
 
 import 'dart:io';
 
+import 'package:file_gallery/gallery/item_image_gallery.dart';
 import 'package:file_gallery/util/file_type_util.dart';
 import 'package:flutter/material.dart';
 
-import 'item_image_gallery.dart';
 
 
 ///

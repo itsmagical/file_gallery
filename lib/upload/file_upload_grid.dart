@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:common/util/util.dart';
+import 'package:file_gallery/upload/file_upload_item.dart';
+import 'package:file_gallery/upload/menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
-import 'file_upload_item.dart';
-import 'menu.dart';
 typedef OnAddFileCallback(File file, FileUploadItem item);
 
 typedef OnDeleteFileCallback(FileUploadItem item);

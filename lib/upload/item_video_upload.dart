@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:file_gallery/images/file_gallery_images.dart';
+import 'package:file_gallery/util/file_type_util.dart';
 import 'package:file_gallery/video_player/video_player_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-import '../util/file_type_util.dart';
 
 class ItemVideoUpload<T> extends StatefulWidget {
 

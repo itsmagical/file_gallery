@@ -1,7 +1,7 @@
+import 'package:file_gallery/video_player/video_player_control.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-import 'video_player_control.dart';
 
 class VideoShareWidget extends InheritedWidget {
 
