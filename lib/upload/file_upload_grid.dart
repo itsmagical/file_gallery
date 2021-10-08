@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:common/util/util.dart';
 import 'package:file_gallery/upload/file_upload_item.dart';
@@ -22,6 +23,7 @@ class FileUploadGrid extends StatefulWidget {
   FileUploadGrid({
     this.items,
     this.maxCount = 9,
+    this.maxAssets = 9,
     this.menus,
     @required this.addFileCallback,
     @required this.deleteFileCallback,
@@ -30,7 +32,11 @@ class FileUploadGrid extends StatefulWidget {
   /// 在原来的基础上编辑时，已上传的网络数据
   final List<FileUploadItem> items;
 
+  /// 最大上传数量
   final int maxCount;
+  /// 每次选择本地资源的最大数量
+  /// 不能超过maxCount
+  final int maxAssets;
   final List<Menu> menus;
   final OnAddFileCallback addFileCallback;
   final OnDeleteFileCallback deleteFileCallback;
@@ -188,7 +194,7 @@ class _FileUploadGridState extends State<FileUploadGrid> {
     } else {
       List<AssetEntity> assets = await AssetPicker.pickAssets(
         context,
-        maxAssets: widget.maxCount,
+        maxAssets: getMaxAssets(),
         requestType: RequestType.image
       );
 
@@ -199,6 +205,12 @@ class _FileUploadGridState extends State<FileUploadGrid> {
         });
       }
     }
+  }
+
+  int getMaxAssets() {
+    int length = items.length;
+    int maxAssets = widget.maxCount - length;
+    return min(maxAssets, widget.maxAssets);
   }
 
   /// 拍视频或视频相册
