@@ -1,25 +1,26 @@
 import 'dart:io';
 
+import 'package:file_gallery/display_grid/file_display_entity.dart';
 import 'package:file_gallery/gallery/image_gallery.dart';
 import 'package:file_gallery/util/file_gallery_util.dart';
 import 'package:flutter/material.dart';
 
-class ItemImageThumbnail extends StatefulWidget {
+class ItemImageDisplay extends StatefulWidget {
 
-  ItemImageThumbnail({
-    this.resource
+  ItemImageDisplay({
+    this.entity
   });
 
-  final dynamic resource;
+  final FileDisplayEntity entity;
 
   @override
   State<StatefulWidget> createState() {
-    return _ItemImageThumbnailState();
+    return _ItemImageDisplayState();
   }
 
 }
 
-class _ItemImageThumbnailState extends State<ItemImageThumbnail> {
+class _ItemImageDisplayState extends State<ItemImageDisplay> {
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,7 @@ class _ItemImageThumbnailState extends State<ItemImageThumbnail> {
             height: 20,
             alignment: Alignment.center,
             child: Text(
-              FileGalleryUtil.getFileName(widget.resource),
+              getFileName(),
               style: TextStyle(
                   fontSize: 12
               ),
@@ -52,7 +53,7 @@ class _ItemImageThumbnailState extends State<ItemImageThumbnail> {
   }
 
   Widget getImage() {
-    var source = widget.resource;
+    var source = widget.entity.resource;
     if (source is File) {
       return Image.file(
         source,
@@ -86,10 +87,20 @@ class _ItemImageThumbnailState extends State<ItemImageThumbnail> {
     Navigator.push(
         context,
         MaterialPageRoute(builder: (context) {
-          return ImageGallery(resources: [widget.resource]);
+          return ImageGallery(resources: [widget.entity.resource]);
 //          return ImageDisplay.file(file: widget.source);
         })
     );
+  }
+
+  /// fileName为null 则获取路径文件名称
+  String getFileName() {
+    var entity = widget.entity;
+    if (entity != null) {
+      bool nameNotEmpty = entity.fileName != null && entity.fileName.isNotEmpty;
+      return nameNotEmpty ? entity.fileName : FileGalleryUtil.getFileName(entity.resource);
+    }
+    return '';
   }
 
 }

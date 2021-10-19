@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_gallery/display_grid/file_display_entity.dart';
 import 'package:file_gallery/images/file_gallery_images.dart';
 import 'package:file_gallery/util/file_gallery_util.dart';
 import 'package:file_gallery/util/file_type_util.dart';
@@ -8,33 +9,34 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 
-class VideoThumbnailItemWidget extends StatefulWidget {
+class ItemVideoDisplay extends StatefulWidget {
 
-  VideoThumbnailItemWidget({
-    this.resource
+  ItemVideoDisplay({
+    this.entity
   });
 
   /// File or url
-  final dynamic resource;
+  final FileDisplayEntity entity;
 
   @override
   State<StatefulWidget> createState() {
-    return _VideoThumbnailItemWidgetState();
+    return _ItemVideoDisplayState();
   }
 
 }
 
-class _VideoThumbnailItemWidgetState extends State<VideoThumbnailItemWidget> {
+class _ItemVideoDisplayState extends State<ItemVideoDisplay> {
 
   VideoPlayerController _videoController;
 
   @override
   void initState() {
-    if (widget.resource is File) {
-      _videoController = VideoPlayerController.file(widget.resource);
-    } else if (widget.resource is String) {
-      if (isNetworkSource(widget.resource))
-        _videoController = VideoPlayerController.network(widget.resource);
+    var resource = widget.entity.resource;
+    if (resource is File) {
+      _videoController = VideoPlayerController.file(resource);
+    } else if (resource is String) {
+      if (isNetworkSource(resource))
+        _videoController = VideoPlayerController.network(resource);
     }
     _videoController.initialize().then((value) {
       setState(() {
@@ -80,7 +82,7 @@ class _VideoThumbnailItemWidgetState extends State<VideoThumbnailItemWidget> {
             height: 20,
             alignment: Alignment.center,
             child: Text(
-              FileGalleryUtil.getFileName(widget.resource),
+              getFileName(),
               style: TextStyle(
                   fontSize: 12
               ),
@@ -103,7 +105,7 @@ class _VideoThumbnailItemWidgetState extends State<VideoThumbnailItemWidget> {
     Navigator.push(
         context,
         MaterialPageRoute(builder: (context) {
-          return getVideoWidget(widget.resource);
+          return getVideoWidget(widget.entity.resource);
           // return FileDisplay(resources: [widget.source]);
         })
     );
@@ -124,6 +126,16 @@ class _VideoThumbnailItemWidgetState extends State<VideoThumbnailItemWidget> {
     return Container(
       child: Text('不支持的图片类型'),
     );
+  }
+
+  /// fileName为null 则获取路径文件名称
+  String getFileName() {
+    var entity = widget.entity;
+    if (entity != null) {
+      bool nameNotEmpty = entity.fileName != null && entity.fileName.isNotEmpty;
+      return nameNotEmpty ? entity.fileName : FileGalleryUtil.getFileName(entity.resource);
+    }
+    return '';
   }
 
 }

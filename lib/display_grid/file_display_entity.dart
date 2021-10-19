@@ -1,4 +1,10 @@
-class FileItem {
+/// 预览grid数据源实体类
+class FileDisplayEntity {
+
+  FileDisplayEntity({
+    this.resource,
+    this.fileName
+  });
 
   /// url or file
   dynamic resource;

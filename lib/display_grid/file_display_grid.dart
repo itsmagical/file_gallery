@@ -1,36 +1,37 @@
 
-import 'package:file_gallery/thumbnail_grid/item_image_thumbnail.dart';
-import 'package:file_gallery/thumbnail_grid/item_office_thumbnail.dart';
-import 'package:file_gallery/thumbnail_grid/item_video_thumbnail.dart';
+import 'package:file_gallery/display_grid/file_display_entity.dart';
+import 'package:file_gallery/display_grid/item_image_display.dart';
+import 'package:file_gallery/display_grid/item_office_display.dart';
+import 'package:file_gallery/display_grid/item_video_display.dart';
 import 'package:file_gallery/util/file_type_util.dart';
 import 'package:flutter/material.dart';
 
 
-/// 图片、视频、Office 缩略图grid
+/// 图片、视频、Office 预览grid
 /// @author LiuHe
 /// @created at 2021/3/3 14:35
 
-class FileThumbnailGrid extends StatefulWidget {
+class FileDisplayGrid extends StatefulWidget {
 
-  FileThumbnailGrid({
-    this.resources,
+  FileDisplayGrid({
+    this.entities,
     this.columnCount = 4
   });
 
   /// url or file
-  final List<dynamic> resources;
+  final List<FileDisplayEntity> entities;
 
   /// 列数
   final int columnCount;
 
   @override
   State<StatefulWidget> createState() {
-    return _FileThumbnailGridState();
+    return _FileDisplayGridState();
   }
 
 }
 
-class _FileThumbnailGridState extends State<FileThumbnailGrid> {
+class _FileDisplayGridState extends State<FileDisplayGrid> {
 
   @override
   Widget build(BuildContext context) {
@@ -43,17 +44,17 @@ class _FileThumbnailGridState extends State<FileThumbnailGrid> {
             childAspectRatio: 0.8
           ),
           itemBuilder: (context, index) {
-            dynamic resource = widget.resources[index];
-            if (FileTypeUtil.isImage(resource)) {
-              return ItemImageThumbnail(resource: resource);;
+            var entity = widget.entities[index];
+            if (FileTypeUtil.isImage(entity.resource)) {
+              return ItemImageDisplay(entity: entity);
             }
 
-            if (FileTypeUtil.isVideo(resource)) {
-              return VideoThumbnailItemWidget(resource: resource);
+            if (FileTypeUtil.isVideo(entity.resource)) {
+              return ItemVideoDisplay(entity: entity);
             }
 
-            if (FileTypeUtil.isOffice(resource)) {
-              return ItemOfficeThumbnail(resource: resource);
+            if (FileTypeUtil.isOffice(entity.resource)) {
+              return ItemOfficeDisplay(entity: entity);
             }
 
             return Container(
@@ -61,7 +62,7 @@ class _FileThumbnailGridState extends State<FileThumbnailGrid> {
               child: Text('不支持的文件类型'),
             );
           },
-          itemCount: widget.resources.length,
+          itemCount: widget.entities.length,
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
         ),
