@@ -1,5 +1,6 @@
 
 import 'package:file_gallery/upload/item_image_upload.dart';
+import 'package:file_gallery/upload/item_office_upload.dart';
 import 'package:file_gallery/upload/item_video_upload.dart';
 import 'package:file_gallery/util/file_type_util.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,8 @@ class FileUploadItem {
       return ItemImageUpload(resource, deleteCallback: () => deleteCallback(this));
     } else if (FileTypeUtil.isVideo(resource)) {
       return ItemVideoUpload(resource, deleteCallback: () => deleteCallback(this), key: Key(resource.toString()));
+    } else if (FileTypeUtil.isOffice(resource)) {
+      return ItemOfficeUpload(resource, deleteCallback: () => deleteCallback(this));
     }
 
     return Container(
