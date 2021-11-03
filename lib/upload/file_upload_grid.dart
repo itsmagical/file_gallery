@@ -69,23 +69,24 @@ class _FileUploadGridState extends State<FileUploadGrid> {
 
     return Container(
       child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: getCrossAxisCount(),
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-//              childAspectRatio: 1.7
-          ),
-          itemBuilder: (context, position) {
-            if (position < items.length) {
-              FileUploadItem item = items[position];
-              return item.createItemWidget(removeItemCallback, position);
-            } else {
-              return createAddImageItemWidget();
-            }
-          },
-          itemCount: getItemCount(),
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.zero,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: getCrossAxisCount(),
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+  //              childAspectRatio: 1.7
+        ),
+        itemBuilder: (context, position) {
+          if (position < items.length) {
+            FileUploadItem item = items[position];
+            return item.createItemWidget(removeItemCallback, position);
+          } else {
+            return createAddImageItemWidget();
+          }
+        },
+        itemCount: getItemCount(),
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
       ),
     );
   }
