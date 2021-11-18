@@ -93,13 +93,14 @@ class _OfficeDisplayState extends State<OfficeDisplay> {
     .then((response) async {
       File file = await getFileFromStorage();
       if (await file.exists()) {
-        setState(() {
-          loadingStatus = 0;
-          filePath = file.path;
-        });
+        loadingStatus = 0;
+        filePath = file.path;
       } else {
         loadingStatus = 2;
       }
+    }).catchError((error) {
+      loadingStatus = 2;
+    }).whenComplete(() {
       setState(() {
 
       });
