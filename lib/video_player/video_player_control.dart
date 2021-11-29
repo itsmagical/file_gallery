@@ -92,7 +92,7 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
     return Container(
       child: Stack(
         children: <Widget>[
-          Expanded(
+          Container(
             child: GestureDetector(
               onDoubleTap: () async {
                 await playOrPause();

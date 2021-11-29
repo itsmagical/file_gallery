@@ -114,7 +114,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         return true;
       },
       child: VideoShareWidget(
-        key: _key,
+        controlKey: _key,
         controller: _controller,
         child: Scaffold(
           body: Container(
@@ -163,7 +163,11 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            if (_isFullScreen) {
+              setPortraitAutoMode();
+            } else {
+              Navigator.pop(context);
+            }
           },
         ),
         elevation: 0,

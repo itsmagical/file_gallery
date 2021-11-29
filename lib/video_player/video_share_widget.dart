@@ -7,12 +7,12 @@ class VideoShareWidget extends InheritedWidget {
 
   VideoShareWidget({
     @required this.child,
-    @required this.key,
+    @required this.controlKey,
     @required this.controller
   });
 
   final Widget child;
-  final GlobalKey<VideoPlayerControlState> key;
+  final GlobalKey<VideoPlayerControlState> controlKey;
   final VideoPlayerController controller;
 
   static VideoShareWidget of(BuildContext context) {
