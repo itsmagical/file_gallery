@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:file_gallery/gallery/image_gallery.dart';
+import 'package:file_gallery/upload/file_upload_share_widget.dart';
 import 'package:flutter/material.dart';
 
 class ItemImageUpload<T> extends StatefulWidget {
@@ -25,6 +26,8 @@ class ItemImageUpload<T> extends StatefulWidget {
 
 class _ItemImageUploadState extends State<ItemImageUpload> {
 
+  FileUploadShareWidget get _shareWidget => FileUploadShareWidget.of(context);
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -42,21 +45,24 @@ class _ItemImageUploadState extends State<ItemImageUpload> {
               child: getImage(),
             ),
           ),
-          Positioned(
-            right: 0,
-            child: GestureDetector(
-              onTap: () {
-                widget.deleteCallback();
-              },
-              child: Container(
-                padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Color(0xFFE6E6E6),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  Icons.close,
-                  size: 16,
+          Visibility(
+            visible: !_shareWidget.viewOnly,
+            child: Positioned(
+              right: 0,
+              child: GestureDetector(
+                onTap: () {
+                  widget.deleteCallback();
+                },
+                child: Container(
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Color(0xFFE6E6E6),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Icons.close,
+                    size: 16,
+                  ),
                 ),
               ),
             ),

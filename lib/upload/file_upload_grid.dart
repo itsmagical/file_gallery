@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:common/util/util.dart';
 import 'package:file_gallery/upload/file_upload_item.dart';
+import 'package:file_gallery/upload/file_upload_share_widget.dart';
 import 'package:file_gallery/upload/menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class FileUploadGrid extends StatefulWidget {
     this.maxCount = 9,
     this.maxAssets = 9,
     this.menus,
+    this.viewOnly = false,
     @required this.addFileCallback,
     @required this.deleteFileCallback,
   });
@@ -38,6 +40,8 @@ class FileUploadGrid extends StatefulWidget {
   /// 不能超过maxCount
   final int maxAssets;
   final List<Menu> menus;
+  /// 禁用上传，仅支持查看已上传附件
+  final bool viewOnly;
   final OnAddFileCallback addFileCallback;
   final OnDeleteFileCallback deleteFileCallback;
 
@@ -68,25 +72,28 @@ class _FileUploadGridState extends State<FileUploadGrid> {
   Widget build(BuildContext context) {
 
     return Container(
-      child: GridView.builder(
-        padding: EdgeInsets.zero,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: getCrossAxisCount(),
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
+      child: FileUploadShareWidget(
+        viewOnly: widget.viewOnly,
+        child: GridView.builder(
+          padding: EdgeInsets.zero,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: getCrossAxisCount(),
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
   //              childAspectRatio: 1.7
+          ),
+          itemBuilder: (context, position) {
+            if (position < items.length) {
+              FileUploadItem item = items[position];
+              return item.createItemWidget(removeItemCallback, position);
+            } else {
+              return createAddImageItemWidget();
+            }
+          },
+          itemCount: getItemCount(),
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
         ),
-        itemBuilder: (context, position) {
-          if (position < items.length) {
-            FileUploadItem item = items[position];
-            return item.createItemWidget(removeItemCallback, position);
-          } else {
-            return createAddImageItemWidget();
-          }
-        },
-        itemCount: getItemCount(),
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
       ),
     );
   }
@@ -99,7 +106,7 @@ class _FileUploadGridState extends State<FileUploadGrid> {
   /// 小于最大上传数量 显示添加图片Item
   int getItemCount() {
     int length = items.length;
-    return length < widget.maxCount ? length + 1 : length;
+    return (!widget.viewOnly && length < widget.maxCount) ? length + 1 : length;
   }
 
   /// 添加图片Item
@@ -191,7 +198,9 @@ class _FileUploadGridState extends State<FileUploadGrid> {
       File image = await ImagePicker.pickImage(
           source: ImageSource.camera,
       );
-      addItem(image);
+      if (Util.isNotNull(image)) {
+        addItem(image);
+      }
     } else {
       List<AssetEntity> assets = await AssetPicker.pickAssets(
         context,

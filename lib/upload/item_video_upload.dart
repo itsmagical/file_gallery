@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:file_gallery/images/file_gallery_images.dart';
+import 'package:file_gallery/upload/file_upload_share_widget.dart';
 import 'package:file_gallery/util/file_type_util.dart';
 import 'package:file_gallery/video_player/video_player_widget.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,8 @@ class ItemVideoUpload<T> extends StatefulWidget {
 class _ItemVideoUploadState extends State<ItemVideoUpload> {
 
   VideoPlayerController _videoController;
+
+  FileUploadShareWidget get _shareWidget => FileUploadShareWidget.of(context);
 
   @override
   void initState() {
@@ -76,21 +79,24 @@ class _ItemVideoUploadState extends State<ItemVideoUpload> {
               ),
             ),
           ),
-          Positioned(
-            right: 0,
-            child: GestureDetector(
-              onTap: () {
-                widget.deleteCallback();
-              },
-              child: Container(
-                padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Color(0xFFE6E6E6),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  Icons.close,
-                  size: 16,
+          Visibility(
+            visible: !_shareWidget.viewOnly,
+            child: Positioned(
+              right: 0,
+              child: GestureDetector(
+                onTap: () {
+                  widget.deleteCallback();
+                },
+                child: Container(
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Color(0xFFE6E6E6),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Icons.close,
+                    size: 16,
+                  ),
                 ),
               ),
             ),

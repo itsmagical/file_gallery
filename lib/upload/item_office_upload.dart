@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_gallery/gallery/office_display.dart';
 import 'package:file_gallery/images/file_gallery_images.dart';
+import 'package:file_gallery/upload/file_upload_share_widget.dart';
 import 'package:file_gallery/util/file_type_util.dart';
 import 'package:flutter/material.dart';
 
@@ -28,6 +29,8 @@ class ItemOfficeUpload<T> extends StatefulWidget {
 
 class _ItemOfficeUploadState extends State<ItemOfficeUpload> {
 
+  FileUploadShareWidget get _shareWidget => FileUploadShareWidget.of(context);
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -45,21 +48,24 @@ class _ItemOfficeUploadState extends State<ItemOfficeUpload> {
               child: Image.asset(getThumbnail()),
             ),
           ),
-          Positioned(
-            right: 0,
-            child: GestureDetector(
-              onTap: () {
-                widget.deleteCallback();
-              },
-              child: Container(
-                padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Color(0xFFE6E6E6),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  Icons.close,
-                  size: 16,
+          Visibility(
+            visible: !_shareWidget.viewOnly,
+            child: Positioned(
+              right: 0,
+              child: GestureDetector(
+                onTap: () {
+                  widget.deleteCallback();
+                },
+                child: Container(
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Color(0xFFE6E6E6),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Icons.close,
+                    size: 16,
+                  ),
                 ),
               ),
             ),
