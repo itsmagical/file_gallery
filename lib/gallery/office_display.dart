@@ -5,7 +5,8 @@ import 'package:common/common.dart';
 import 'package:common/network/network.dart';
 import 'package:file_gallery/util/file_gallery_util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_filereader/flutter_filereader.dart';
+//import 'package:flutter_filereader/flutter_filereader.dart';
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
 
@@ -18,13 +19,13 @@ class OfficeDisplay extends StatefulWidget {
 
   OfficeDisplay.file({
     File file
-  }) : resource = file.path;
+  }) : resource = file;
 
   OfficeDisplay.url({
     String url
   }) : resource = url;
 
-  final String resource;
+  final dynamic resource;
 
   @override
   State<StatefulWidget> createState() {
@@ -57,15 +58,35 @@ class _OfficeDisplayState extends State<OfficeDisplay> {
 
   /// 预览本地文件，不存在则下载
   void displayFile() async {
+    if (widget.resource is File) {
+      File file = widget.resource;
+      if (!await file.exists()) {
+        setState(() {
+          loadingStatus = 3;
+        });
+        return;
+      }
+    }
     File file = await getFileFromStorage();
     if (await file.exists()) {
       setState(() {
         loadingStatus = 0;
         filePath = file.path;
+        openFile(filePath);
       });
     } else {
-      downloadFile(widget.resource, file.path);
+      if (widget.resource is String) {
+        downloadFile(widget.resource, file.path);
+      }
     }
+  }
+
+  void openFile(String path) {
+    OpenFile.open(path).then((result) {
+      if (result.type == ResultType.done) {
+        Navigator.pop(context);
+      }
+    });
   }
 
   Future<File> getFileFromStorage() async {
@@ -95,6 +116,7 @@ class _OfficeDisplayState extends State<OfficeDisplay> {
       if (await file.exists()) {
         loadingStatus = 0;
         filePath = file.path;
+        openFile(filePath);
       } else {
         loadingStatus = 2;
       }
@@ -114,9 +136,10 @@ class _OfficeDisplayState extends State<OfficeDisplay> {
       body: Stack(
         children: <Widget>[
           Container(
-            child: loadingStatus == 0 ? FileReaderView(
-              filePath: filePath,
-            ) : getStatusWidget(loadingStatus),
+//            child: loadingStatus == 0 ? FileReaderView(
+//              filePath: filePath,
+//            ) : getStatusWidget(loadingStatus),
+            child: loadingStatus == 0 ? Container() : getStatusWidget(loadingStatus),
           ),
           Wrap(
             children: <Widget>[
@@ -153,6 +176,13 @@ class _OfficeDisplayState extends State<OfficeDisplay> {
         alignment: Alignment.center,
         child: Text(
           '下载文件错误'
+        ),
+      );
+    } else if (status == 3) {
+      return Container(
+        alignment: Alignment.center,
+        child: Text(
+            '文件不存在'
         ),
       );
     }

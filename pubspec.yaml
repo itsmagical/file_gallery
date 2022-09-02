@@ -28,8 +28,11 @@ dependencies:
 
   path_provider: 1.6.27
 
-  # 本地Office文档预览
-  flutter_filereader: 2.2.0
+#  # 本地Office文档预览
+#  flutter_filereader: 2.2.0
+  # 本地应用打开文件
+  # sdk<29 manifest添加tools:remove="android:requestLegacyExternalStorage"
+  open_file: 3.0.3
 
   # 基本组件
   common:
