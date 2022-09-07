@@ -85,6 +85,18 @@ class _OfficeDisplayState extends State<OfficeDisplay> {
     OpenFile.open(path).then((result) {
       if (result.type == ResultType.done) {
         Navigator.pop(context);
+      } else if (result.type == ResultType.noAppToOpen) {
+        setState(() {
+          loadingStatus = 4;
+        });
+      } else if (result.type == ResultType.fileNotFound) {
+        setState(() {
+          loadingStatus = 3;
+        });
+      } else {
+        setState(() {
+          loadingStatus = 5;
+        });
       }
     });
   }
