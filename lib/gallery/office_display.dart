@@ -37,7 +37,7 @@ class OfficeDisplay extends StatefulWidget {
 
 class _OfficeDisplayState extends State<OfficeDisplay> {
 
-  /// 加载状态 0 文件存在可以加载, 1 下载中， 2 下载错误
+  /// 加载状态 0 文件存在可以加载, 1 下载中， 2 下载错误 3 文件不存在 4 没有找到打开此文件的应用
   int loadingStatus = 1;
 
   /// 本地文件路径
@@ -183,6 +183,13 @@ class _OfficeDisplayState extends State<OfficeDisplay> {
         alignment: Alignment.center,
         child: Text(
             '文件不存在'
+        ),
+      );
+    } else if (status == 4) {
+      return Container(
+        alignment: Alignment.center,
+        child: Text(
+            '请下载安装打开此文件的应用'
         ),
       );
     }
