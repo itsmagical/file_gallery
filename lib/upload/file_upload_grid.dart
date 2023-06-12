@@ -2,9 +2,11 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:common/util/util.dart';
+import 'package:file_gallery/upload/compress/base_compress.dart';
 import 'package:file_gallery/upload/file_upload_item.dart';
 import 'package:file_gallery/upload/file_upload_share_widget.dart';
 import 'package:file_gallery/upload/menu.dart';
+import 'package:file_gallery/util/file_type_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,6 +29,7 @@ class FileUploadGrid extends StatefulWidget {
     this.maxAssets = 9,
     this.menus,
     this.viewOnly = false,
+    this.compress,
     @required this.addFileCallback,
     @required this.deleteFileCallback,
   });
@@ -42,6 +45,8 @@ class FileUploadGrid extends StatefulWidget {
   final List<Menu> menus;
   /// 禁用上传，仅支持查看已上传附件
   final bool viewOnly;
+  /// 压缩
+  final BaseCompress compress;
   final OnAddFileCallback addFileCallback;
   final OnDeleteFileCallback deleteFileCallback;
 
@@ -229,9 +234,12 @@ class _FileUploadGridState extends State<FileUploadGrid> {
 
     if (isCamera) {
       File video = await ImagePicker.pickVideo(
-          source: ImageSource.camera
+          source: ImageSource.camera,
+          maxDuration: widget.compress?.getVideoDuration()
       );
-      addItem(video);
+      if (Util.isNotNull(video)) {
+        addItem(video);
+      }
     } else {
       List<AssetEntity> assets = await AssetPicker.pickAssets(
           context,
@@ -249,7 +257,17 @@ class _FileUploadGridState extends State<FileUploadGrid> {
   }
 
   /// 添加File
-  addItem(File file) {
+  addItem(File file) async {
+    if (widget.compress != null) {
+      if (FileTypeUtil.isImage(file)) {
+        file = await widget.compress.imageCompress(file);
+      }
+      if (FileTypeUtil.isVideo(file)) {
+        widget.compress.videoCompress(file).then((file) {
+
+        });
+      }
+    }
     FileUploadItem item = FileUploadItem(file);
 //    items.insert(0, item);
     items.add(item);

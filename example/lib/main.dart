@@ -1,4 +1,10 @@
-import 'package:file_gallery/thumbnail_grid/file_thumbnail_grid.dart';
+import 'dart:io';
+
+import 'package:file_gallery/gallery/office_display.dart';
+import 'package:file_gallery/upload/compress/default_compress.dart';
+import 'package:file_gallery/upload/file_upload_grid.dart';
+import 'package:file_gallery/upload/file_upload_item.dart';
+import 'package:file_gallery/upload/menu.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -64,6 +70,16 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  List<FileUploadItem> items = [];
+
+  @override
+  void initState() {
+    items.add(FileUploadItem('http://www.xxx.com/doc/a.doc'));
+    items.add(FileUploadItem(File('/storage/emulated/0/Pictures/Screenshots/Screenshot_20221110_163747_com.sinieco.snmis.cspx.jpg')));
+    items.add(FileUploadItem(File('/data/user/0/com.example.example/app_flutter/aa.jpg')));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -77,14 +93,42 @@ class _MyHomePageState extends State<MyHomePage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
+        actions: [
+          IconButton(icon: Icon(Icons.add), onPressed: () async {
+            File file = File('/storage/emulated/0/1.txt');
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return OfficeDisplay.file(file: File('/storage/emulated/0/1.txt'));
+//              return OfficeDisplay.url(url: 'http://192.168.20.141:8080/apps/a.docx');
+            }));
+          })
+        ],
       ),
 
       body: Container(
 //        child: Image.asset('lib/img/file_type_word.png'),
 //
-        child: FileThumbnailGrid(
-          resources: ['www.xxx.doc'],
+        child: FileUploadGrid(
+            maxCount: 9,
+            maxAssets: 1,
+            items: items,
+//            viewOnly: true,
+            menus: [Menu.VIDEO, Menu.IMAGE_GALLERY],
+            compress: DefaultCompress(),
+            addFileCallback: (file, item) async {
+              print(file.path);
+            },
+            deleteFileCallback: (item) {
+
+            }
         ),
+//        child: FileDisplayGrid(
+//          entities: [
+//            FileDisplayEntity(
+//              resource: 'www.xxx.doc',
+//              fileName: 'aa'
+//            )
+//          ],
+//        ),
       ),
 
       floatingActionButton: FloatingActionButton(

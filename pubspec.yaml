@@ -34,7 +34,10 @@ dependencies:
   # sdk<29 manifest添加tools:remove="android:requestLegacyExternalStorage"
   open_file: 3.0.3
 
-  # 基本组件
+  flutter_image_compress: 0.7.0
+  video_compress: 2.1.1
+
+# 基本组件
   common:
     git:
       url: https://github.com/itsmagical/common.git
