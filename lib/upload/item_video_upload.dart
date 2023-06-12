@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:file_gallery/images/file_gallery_images.dart';
 import 'package:file_gallery/upload/file_upload_share_widget.dart';
+import 'package:file_gallery/upload/upload_status/upload_status_controller.dart';
+import 'package:file_gallery/upload/upload_status/upload_status_widget.dart';
 import 'package:file_gallery/util/file_type_util.dart';
 import 'package:file_gallery/video_player/video_player_widget.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,8 @@ class ItemVideoUpload<T> extends StatefulWidget {
       this.source,
       {
         this.deleteCallback,
+        this.retryingCallback,
+        this.statusController,
         Key key
       }
   );
@@ -23,6 +27,8 @@ class ItemVideoUpload<T> extends StatefulWidget {
   final T source;
 
   final Function deleteCallback;
+  final VoidCallback retryingCallback;
+  final UploadStatusController statusController;
 
   @override
   State<StatefulWidget> createState() {
@@ -67,7 +73,10 @@ class _ItemVideoUploadState extends State<ItemVideoUpload> {
             right: 0,
             bottom: 0,
             child: Container(
-              child: VideoPlayer(_videoController),
+              child: UploadStatusWidget(
+                retryingCallback: widget.retryingCallback,
+                statusController: widget.statusController,
+                child: VideoPlayer(_videoController)),
             ),
           ),
           Center(

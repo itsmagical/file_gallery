@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:file_gallery/gallery/office_display.dart';
 import 'package:file_gallery/images/file_gallery_images.dart';
 import 'package:file_gallery/upload/file_upload_share_widget.dart';
+import 'package:file_gallery/upload/upload_status/upload_status_controller.dart';
+import 'package:file_gallery/upload/upload_status/upload_status_widget.dart';
 import 'package:file_gallery/util/file_type_util.dart';
 import 'package:flutter/material.dart';
 
@@ -13,12 +15,16 @@ class ItemOfficeUpload<T> extends StatefulWidget {
       this.source,
       {
         this.deleteCallback,
+        this.retryingCallback,
+        this.statusController
       }
   );
 
   final T source;
 
   final Function deleteCallback;
+  final VoidCallback retryingCallback;
+  final UploadStatusController statusController;
 
   @override
   State<StatefulWidget> createState() {
@@ -45,7 +51,11 @@ class _ItemOfficeUploadState extends State<ItemOfficeUpload> {
             right: 0,
             bottom: 0,
             child: Container(
-              child: Image.asset(getThumbnail()),
+              child: UploadStatusWidget(
+                retryingCallback: widget.retryingCallback,
+                statusController: widget.statusController,
+                child: Image.asset(getThumbnail())
+              ),
             ),
           ),
           Visibility(

@@ -90,7 +90,7 @@ class _FileUploadGridState extends State<FileUploadGrid> {
           itemBuilder: (context, position) {
             if (position < items.length) {
               FileUploadItem item = items[position];
-              return item.createItemWidget(removeItemCallback, position);
+              return item.createItemWidget(widget.addFileCallback, removeItemCallback, position);
             } else {
               return createAddImageItemWidget();
             }
@@ -263,9 +263,7 @@ class _FileUploadGridState extends State<FileUploadGrid> {
         file = await widget.compress.imageCompress(file);
       }
       if (FileTypeUtil.isVideo(file)) {
-        widget.compress.videoCompress(file).then((file) {
-
-        });
+        file = await widget.compress.videoCompress(file);
       }
     }
     FileUploadItem item = FileUploadItem(file);

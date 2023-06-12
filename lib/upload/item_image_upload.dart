@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:file_gallery/gallery/image_gallery.dart';
 import 'package:file_gallery/upload/file_upload_share_widget.dart';
+import 'package:file_gallery/upload/upload_status/upload_status_controller.dart';
+import 'package:file_gallery/upload/upload_status/upload_status_widget.dart';
 import 'package:flutter/material.dart';
 
 class ItemImageUpload<T> extends StatefulWidget {
@@ -10,12 +12,17 @@ class ItemImageUpload<T> extends StatefulWidget {
       this.source,
       {
         this.deleteCallback,
+        this.retryingCallback,
+        this.statusController
       }
   );
 
   final T source;
 
   final Function deleteCallback;
+
+  final VoidCallback retryingCallback;
+  final UploadStatusController statusController;
 
   @override
   State<StatefulWidget> createState() {
@@ -42,7 +49,11 @@ class _ItemImageUploadState extends State<ItemImageUpload> {
             right: 0,
             bottom: 0,
             child: Container(
-              child: getImage(),
+              child: UploadStatusWidget(
+                retryingCallback: widget.retryingCallback,
+                statusController: widget.statusController,
+                child: getImage(),
+              ),
             ),
           ),
           Visibility(

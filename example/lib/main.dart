@@ -116,6 +116,11 @@ class _MyHomePageState extends State<MyHomePage> {
             compress: DefaultCompress(),
             addFileCallback: (file, item) async {
               print(file.path);
+
+//              item.statusController.setLoading();
+//              Future.delayed(Duration(seconds: 5), () {
+//                item.statusController.setFinish();
+//              });
             },
             deleteFileCallback: (item) {
 
