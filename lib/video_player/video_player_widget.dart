@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:auto_orientation/auto_orientation.dart';
-import 'package:common/util/util.dart';
+import 'package:file_gallery/util/file_gallery_util.dart';
 import 'package:file_gallery/video_player/video_player_control.dart';
 import 'package:file_gallery/video_player/video_share_widget.dart';
 import 'package:file_gallery/video_player/video_source_type.dart';
@@ -186,7 +186,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   @override
   void dispose() {
-    if (Util.isNotNull(_controller)) {
+    if (FileGalleryUtil.isNotNull(_controller)) {
       _controller.removeListener(_playListener);
       _controller.dispose();
     }

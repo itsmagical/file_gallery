@@ -23,6 +23,12 @@ dependencies:
 
   photo_view: ^0.9.2
 
+  # 动态权限
+  permission_handler: 5.1.0+2
+
+  # http 请求库
+  dio: ^3.0.8
+
   # 屏幕旋转
   auto_orientation: ^1.0.6
 
@@ -38,9 +44,9 @@ dependencies:
   video_compress: 2.1.1
 
 # 基本组件
-  common:
-    git:
-      url: https://github.com/itsmagical/common.git
+#  common:
+#    git:
+#      url: https://github.com/itsmagical/common.git
 #      url: https://github.com/yy1234/common.git
 #      url: git@github.com:yy1234/common.git
 #      ref: main

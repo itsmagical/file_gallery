@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:common/util/util.dart';
 import 'package:file_gallery/upload/compress/base_compress.dart';
 import 'package:file_gallery/upload/file_upload_item.dart';
 import 'package:file_gallery/upload/file_upload_share_widget.dart';
 import 'package:file_gallery/upload/menu.dart';
+import 'package:file_gallery/util/file_gallery_util.dart';
 import 'package:file_gallery/util/file_type_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -63,10 +63,10 @@ class _FileUploadGridState extends State<FileUploadGrid> {
   List<FileUploadItem> items;
 
   _FileUploadGridState(List<FileUploadItem> items, int maxCount, List<Menu> menus) {
-    this.items = Util.isNotNull(items) ? items : [];
+    this.items = FileGalleryUtil.isNotNull(items) ? items : [];
 
     /// 默认拍照和相册
-    if (!Util.isNotEmpty(menus)) {
+    if (!FileGalleryUtil.isNotEmpty(menus)) {
       menus = [Menu.IMAGE, Menu.IMAGE_GALLERY];
     }
     menuActions = getMenuActions(menus);
@@ -203,7 +203,7 @@ class _FileUploadGridState extends State<FileUploadGrid> {
       File image = await ImagePicker.pickImage(
           source: ImageSource.camera,
       );
-      if (Util.isNotNull(image)) {
+      if (FileGalleryUtil.isNotNull(image)) {
         addItem(image);
       }
     } else {
@@ -213,7 +213,7 @@ class _FileUploadGridState extends State<FileUploadGrid> {
         requestType: RequestType.image
       );
 
-      if (Util.isNotNull(assets)) {
+      if (FileGalleryUtil.isNotNull(assets)) {
         assets.forEach((asset) async {
           File image = await asset.file;
           addItem(image);
@@ -237,7 +237,7 @@ class _FileUploadGridState extends State<FileUploadGrid> {
           source: ImageSource.camera,
           maxDuration: widget.compress?.getVideoDuration()
       );
-      if (Util.isNotNull(video)) {
+      if (FileGalleryUtil.isNotNull(video)) {
         addItem(video);
       }
     } else {
@@ -247,7 +247,7 @@ class _FileUploadGridState extends State<FileUploadGrid> {
           requestType: RequestType.video
       );
 
-      if (Util.isNotNull(assets)) {
+      if (FileGalleryUtil.isNotNull(assets)) {
         assets.forEach((asset) async {
           File video = await asset.file;
           addItem(video);
