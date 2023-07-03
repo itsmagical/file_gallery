@@ -104,7 +104,7 @@ class _FileUploadGridState extends State<FileUploadGrid> {
   }
 
   int getCrossAxisCount() {
-    return widget.maxCount > 1 ? 3 : 1;
+    return widget.maxCount > 0 ? 3 : 1;
   }
 
   /// item数量
