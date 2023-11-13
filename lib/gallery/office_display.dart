@@ -18,11 +18,11 @@ import 'package:permission_handler/permission_handler.dart';
 class OfficeDisplay extends StatefulWidget {
 
   OfficeDisplay.file({
-    File file
+    required File file
   }) : resource = file;
 
   OfficeDisplay.url({
-    String url
+    required String url
   }) : resource = url;
 
   final dynamic resource;
@@ -41,7 +41,7 @@ class _OfficeDisplayState extends State<OfficeDisplay> {
   int loadingStatus = 1;
 
   /// 本地文件路径
-  String filePath;
+  String? filePath;
 
   @override
   void initState() {
@@ -72,7 +72,8 @@ class _OfficeDisplayState extends State<OfficeDisplay> {
       setState(() {
         loadingStatus = 0;
         filePath = file.path;
-        openFile(filePath);
+        if (filePath != null)
+        openFile(filePath!);
       });
     } else {
       if (widget.resource is String) {
@@ -128,7 +129,8 @@ class _OfficeDisplayState extends State<OfficeDisplay> {
       if (await file.exists()) {
         loadingStatus = 0;
         filePath = file.path;
-        openFile(filePath);
+        if (filePath != null)
+        openFile(filePath!);
       } else {
         loadingStatus = 2;
       }

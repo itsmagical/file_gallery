@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class ItemImageDisplay extends StatefulWidget {
 
   ItemImageDisplay({
-    this.entity
+    required this.entity
   });
 
   final FileDisplayEntity entity;
@@ -73,7 +73,7 @@ class _ItemImageDisplayState extends State<ItemImageDisplay> {
       }
     }
 
-    return null;
+    return Container();
   }
 
   /// 是否为网络资源
@@ -96,9 +96,9 @@ class _ItemImageDisplayState extends State<ItemImageDisplay> {
   /// fileName为null 则获取路径文件名称
   String getFileName() {
     var entity = widget.entity;
-    if (entity != null) {
-      bool nameNotEmpty = entity.fileName != null && entity.fileName.isNotEmpty;
-      return nameNotEmpty ? entity.fileName : FileGalleryUtil.getFileName(entity.resource);
+    if (entity != null && entity.fileName != null) {
+      bool nameNotEmpty = entity.fileName != null && entity.fileName!.isNotEmpty;
+      return nameNotEmpty ? entity.fileName! : FileGalleryUtil.getFileName(entity.resource);
     }
     return '';
   }

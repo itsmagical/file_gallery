@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -75,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     items.add(FileUploadItem('http://www.xxx.com/doc/a.doc'));
-    items.add(FileUploadItem(File('/storage/emulated/0/Pictures/Screenshots/Screenshot_20221110_163747_com.sinieco.snmis.cspx.jpg')));
+    // items.add(FileUploadItem(File('/storage/emulated/0/Pictures/Screenshots/Screenshot_20231010_142609_com.sinieco.snmis_ycld.jpg')));
     items.add(FileUploadItem(File('/data/user/0/com.example.example/app_flutter/aa.jpg')));
     super.initState();
   }

@@ -24,14 +24,14 @@ typedef OnDeleteFileCallback(FileUploadItem item);
 class FileUploadGrid extends StatefulWidget {
 
   FileUploadGrid({
-    this.items,
+    required this.items,
     this.maxCount = 9,
     this.maxAssets = 9,
     this.menus,
     this.viewOnly = false,
     this.compress,
-    @required this.addFileCallback,
-    @required this.deleteFileCallback,
+    required this.addFileCallback,
+    required this.deleteFileCallback,
   });
 
   /// 在原来的基础上编辑时，已上传的网络数据
@@ -42,11 +42,11 @@ class FileUploadGrid extends StatefulWidget {
   /// 每次选择本地资源的最大数量
   /// 不能超过maxCount
   final int maxAssets;
-  final List<Menu> menus;
+  final List<Menu>? menus;
   /// 禁用上传，仅支持查看已上传附件
   final bool viewOnly;
   /// 压缩
-  final BaseCompress compress;
+  final BaseCompress? compress;
   final OnAddFileCallback addFileCallback;
   final OnDeleteFileCallback deleteFileCallback;
 
@@ -59,17 +59,17 @@ class FileUploadGrid extends StatefulWidget {
 
 class _FileUploadGridState extends State<FileUploadGrid> {
 
-  List<CupertinoActionSheetAction> menuActions;
-  List<FileUploadItem> items;
+  late List<CupertinoActionSheetAction> menuActions;
+  late List<FileUploadItem> items;
 
-  _FileUploadGridState(List<FileUploadItem> items, int maxCount, List<Menu> menus) {
+  _FileUploadGridState(List<FileUploadItem> items, int maxCount, List<Menu>? menus) {
     this.items = FileGalleryUtil.isNotNull(items) ? items : [];
 
     /// 默认拍照和相册
     if (!FileGalleryUtil.isNotEmpty(menus)) {
       menus = [Menu.IMAGE, Menu.IMAGE_GALLERY];
     }
-    menuActions = getMenuActions(menus);
+    menuActions = getMenuActions(menus!);
 
   }
 
@@ -200,23 +200,33 @@ class _FileUploadGridState extends State<FileUploadGrid> {
     Navigator.pop(context);
 
     if (isCamera) {
-      File image = await ImagePicker.pickImage(
-          source: ImageSource.camera,
+      ImagePicker imagePicker = ImagePicker();
+      XFile? image = await imagePicker.pickImage(
+          source: ImageSource.camera
       );
+
+      // File image = await ImagePicker.pickImage(
+      //     source: ImageSource.camera,
+      // );
       if (FileGalleryUtil.isNotNull(image)) {
-        addItem(image);
+        addItem(File(image!.path));
       }
     } else {
-      List<AssetEntity> assets = await AssetPicker.pickAssets(
+
+      List<AssetEntity>? assets = await AssetPicker.pickAssets(
         context,
-        maxAssets: getMaxAssets(),
-        requestType: RequestType.image
+        pickerConfig: AssetPickerConfig(
+          maxAssets: getMaxAssets(),
+          requestType: RequestType.image
+        )
       );
 
       if (FileGalleryUtil.isNotNull(assets)) {
-        assets.forEach((asset) async {
-          File image = await asset.file;
-          addItem(image);
+        assets!.forEach((asset) async {
+          File? image = await asset.file;
+          if (image != null) {
+            addItem(image);
+          }
         });
       }
     }
@@ -233,24 +243,29 @@ class _FileUploadGridState extends State<FileUploadGrid> {
     Navigator.pop(context);
 
     if (isCamera) {
-      File video = await ImagePicker.pickVideo(
-          source: ImageSource.camera,
-          maxDuration: widget.compress?.getVideoDuration()
+      ImagePicker imagePicker = ImagePicker();
+      XFile? video = await imagePicker.pickVideo(
+        source: ImageSource.camera,
+        maxDuration: widget.compress?.getVideoDuration()
       );
       if (FileGalleryUtil.isNotNull(video)) {
-        addItem(video);
+        addItem(File(video!.path));
       }
     } else {
-      List<AssetEntity> assets = await AssetPicker.pickAssets(
+      List<AssetEntity>? assets = await AssetPicker.pickAssets(
           context,
-          maxAssets: widget.maxCount,
-          requestType: RequestType.video
+          pickerConfig: AssetPickerConfig(
+              maxAssets: widget.maxCount,
+              requestType: RequestType.video
+          ),
       );
 
       if (FileGalleryUtil.isNotNull(assets)) {
-        assets.forEach((asset) async {
-          File video = await asset.file;
-          addItem(video);
+        assets!.forEach((asset) async {
+          File? video = await asset.file;
+          if (video != null) {
+            addItem(video);
+          }
         });
       }
     }
@@ -260,10 +275,10 @@ class _FileUploadGridState extends State<FileUploadGrid> {
   addItem(File file) async {
     if (widget.compress != null) {
       if (FileTypeUtil.isImage(file)) {
-        file = await widget.compress.imageCompress(file);
+        file = (await widget.compress?.imageCompress(file))!;
       }
       if (FileTypeUtil.isVideo(file)) {
-        file = await widget.compress.videoCompress(file);
+        file = (await widget.compress?.videoCompress(file))!;
       }
     }
     FileUploadItem item = FileUploadItem(file);

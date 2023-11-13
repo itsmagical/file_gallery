@@ -18,7 +18,7 @@ class ItemVideoUpload<T> extends StatefulWidget {
         this.deleteCallback,
         this.retryingCallback,
         this.statusController,
-        Key key
+        Key? key
       }
   );
 //      : super(key: key);
@@ -26,9 +26,9 @@ class ItemVideoUpload<T> extends StatefulWidget {
   /// File or url
   final T source;
 
-  final Function deleteCallback;
-  final VoidCallback retryingCallback;
-  final UploadStatusController statusController;
+  final Function? deleteCallback;
+  final VoidCallback? retryingCallback;
+  final UploadStatusController? statusController;
 
   @override
   State<StatefulWidget> createState() {
@@ -39,7 +39,7 @@ class ItemVideoUpload<T> extends StatefulWidget {
 
 class _ItemVideoUploadState extends State<ItemVideoUpload> {
 
-  VideoPlayerController _videoController;
+  late VideoPlayerController _videoController;
 
   FileUploadShareWidget get _shareWidget => FileUploadShareWidget.of(context);
 
@@ -49,7 +49,7 @@ class _ItemVideoUploadState extends State<ItemVideoUpload> {
       _videoController = VideoPlayerController.file(widget.source);
     } else if (widget.source is String) {
       if (isNetworkSource(widget.source))
-        _videoController = VideoPlayerController.network(widget.source);
+        _videoController = VideoPlayerController.networkUrl(widget.source);
     }
     _videoController.initialize().then((value) {
       setState(() {
@@ -89,12 +89,14 @@ class _ItemVideoUploadState extends State<ItemVideoUpload> {
             ),
           ),
           Visibility(
-            visible: !_shareWidget.viewOnly,
+            visible: !_shareWidget.viewOnly!,
             child: Positioned(
               right: 0,
               child: GestureDetector(
                 onTap: () {
-                  widget.deleteCallback();
+                  if (widget.deleteCallback != null) {
+                    widget.deleteCallback!();
+                  }
                 },
                 child: Container(
                   padding: EdgeInsets.all(4),

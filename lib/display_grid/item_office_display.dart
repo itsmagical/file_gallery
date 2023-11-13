@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 class ItemOfficeDisplay extends StatefulWidget {
 
   ItemOfficeDisplay({
-    this.entity
+    required this.entity
   });
 
   final FileDisplayEntity entity;
@@ -107,9 +107,9 @@ class _ItemOfficeDisplayState extends State<ItemOfficeDisplay> {
   /// fileName为null 则获取路径文件名称
   String getFileName() {
     var entity = widget.entity;
-    if (entity != null) {
-      bool nameNotEmpty = entity.fileName != null && entity.fileName.isNotEmpty;
-      return nameNotEmpty ? entity.fileName : FileGalleryUtil.getFileName(entity.resource);
+    if (entity != null && entity.fileName != null) {
+      bool nameNotEmpty = entity.fileName != null && entity.fileName!.isNotEmpty;
+      return nameNotEmpty ? entity.fileName! : FileGalleryUtil.getFileName(entity.resource);
     }
     return '';
   }

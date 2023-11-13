@@ -5,7 +5,14 @@ import 'package:path_provider/path_provider.dart';
 
 class CompressUtil {
 
-  static Future<File> imageCompress({File file, String targetPath, int minWidth, int minHeight, int sampleSize, int quality}) async {
+  static Future<File> imageCompress({
+    required File file,
+    String? targetPath,
+    int? minWidth,
+    int? minHeight,
+    int? sampleSize,
+    int? quality
+  }) async {
 
     if (targetPath == null) {
       Directory directory = await getApplicationDocumentsDirectory();
@@ -19,7 +26,7 @@ class CompressUtil {
       targetPath = directory.absolute.path + name;
     }
 
-    return await FlutterImageCompress.compressAndGetFile(
+    XFile? xFile = await FlutterImageCompress.compressAndGetFile(
       file.absolute.path,
       targetPath,
 //      minWidth: minWidth ?? 1920,
@@ -27,6 +34,12 @@ class CompressUtil {
       inSampleSize: sampleSize ?? 1,
       quality: quality ?? 95,
     );
+
+    if (xFile != null) {
+      return File(xFile.path);
+    }
+
+    return file;
   }
 
 }

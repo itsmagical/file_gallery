@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 class UploadStatusWidget extends StatefulWidget {
 
   UploadStatusWidget({
-    this.child,
+    required this.child,
     this.retryingCallback,
     this.statusController
   });
 
   final Widget child;
-  final VoidCallback retryingCallback;
-  final UploadStatusController statusController;
+  final VoidCallback? retryingCallback;
+  final UploadStatusController? statusController;
 
   @override
   State<StatefulWidget> createState() {
@@ -24,7 +24,7 @@ class UploadStatusWidget extends StatefulWidget {
 class _UploadStatusWidgetState extends State<UploadStatusWidget> {
 
 
-  UploadStatus status;
+  UploadStatus? status;
 
   setUploadStatus(UploadStatus status) {
     setState(() {
@@ -35,8 +35,8 @@ class _UploadStatusWidgetState extends State<UploadStatusWidget> {
   @override
   void initState() {
     if (widget.statusController != null) {
-      status = widget.statusController.getUploadStatus();
-      widget.statusController.setUploadStatusMethod(setUploadStatus);
+      status = widget.statusController?.getUploadStatus();
+      widget.statusController!.setUploadStatusMethod(setUploadStatus);
     }
     super.initState();
   }
@@ -55,7 +55,7 @@ class _UploadStatusWidgetState extends State<UploadStatusWidget> {
     List<Widget> widgets = [];
     widgets.add(widget.child);
     if (status != null) {
-      widgets.add(_getStatusWidget(status));
+      widgets.add(_getStatusWidget(status!));
     }
     return widgets;
   }
@@ -82,7 +82,7 @@ class _UploadStatusWidgetState extends State<UploadStatusWidget> {
     return GestureDetector(
       onTap: () {
         if (widget.retryingCallback != null) {
-          widget.retryingCallback.call();
+          widget.retryingCallback!.call();
         }
       },
       child: Container(

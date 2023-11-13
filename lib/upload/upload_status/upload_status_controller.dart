@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 
 class UploadStatusController {
 
-  ValueChanged<UploadStatus> _statusMethod;
+  late ValueChanged<UploadStatus> _statusMethod;
 
-  UploadStatus _uploadStatus;
+  UploadStatus? _uploadStatus;
 
   void setLoading() {
     _setStatus(UploadStatus.LOADING);
@@ -26,7 +26,7 @@ class UploadStatusController {
     }
   }
 
-  UploadStatus getUploadStatus() {
+  UploadStatus? getUploadStatus() {
     return _uploadStatus;
   }
 

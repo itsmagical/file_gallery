@@ -22,20 +22,20 @@ class DefaultCompress extends BaseCompress {
   }
 
   /// 图片压缩后的最大约值，quality < 100 实际值小于最大约值
-  double imageMaxSize;
-  int imageQuality;
-  Duration videoMaxDuration;
+  double? imageMaxSize;
+  int? imageQuality;
+  Duration? videoMaxDuration;
 
   @override
   Future<File> imageCompress(File file) async {
     int length = await file.length();
-    int sampleSize;
-    if (length < imageMaxSize && imageQuality == null) {
+    int sampleSize = 1;
+    if (length < imageMaxSize! && imageQuality == null) {
       return file;
     }
 
-    if (length > imageMaxSize) {
-      var scaleMultiple = length / imageMaxSize;
+    if (length > imageMaxSize!) {
+      var scaleMultiple = length / imageMaxSize!;
       sampleSize = sqrt(scaleMultiple).round();
     }
 
@@ -49,12 +49,12 @@ class DefaultCompress extends BaseCompress {
       quality: VideoQuality.MediumQuality,
       deleteOrigin: true,
     );
-    return Future.value(info.file);
+    return Future.value(info!.file);
   }
 
   @override
   Duration getVideoDuration() {
-    return videoMaxDuration;
+    return videoMaxDuration!;
   }
 
 }

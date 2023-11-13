@@ -19,10 +19,10 @@ class ItemImageUpload<T> extends StatefulWidget {
 
   final T source;
 
-  final Function deleteCallback;
+  final Function? deleteCallback;
 
-  final VoidCallback retryingCallback;
-  final UploadStatusController statusController;
+  final VoidCallback? retryingCallback;
+  final UploadStatusController? statusController;
 
   @override
   State<StatefulWidget> createState() {
@@ -57,12 +57,14 @@ class _ItemImageUploadState extends State<ItemImageUpload> {
             ),
           ),
           Visibility(
-            visible: !_shareWidget.viewOnly,
+            visible: !_shareWidget.viewOnly!,
             child: Positioned(
               right: 0,
               child: GestureDetector(
                 onTap: () {
-                  widget.deleteCallback();
+                  if (widget.deleteCallback != null) {
+                    widget.deleteCallback!();
+                  }
                 },
                 child: Container(
                   padding: EdgeInsets.all(4),
@@ -104,7 +106,7 @@ class _ItemImageUploadState extends State<ItemImageUpload> {
       }
     }
 
-    return null;
+    return Container();
   }
 
   /// 是否为网络资源

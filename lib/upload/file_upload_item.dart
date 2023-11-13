@@ -15,7 +15,7 @@ class FileUploadItem {
   /// 附加数据
   dynamic extraData;
 
-  UploadStatusController statusController;
+  late UploadStatusController statusController;
 
   FileUploadItem(
     this.resource,

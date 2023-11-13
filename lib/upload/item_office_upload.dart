@@ -22,9 +22,9 @@ class ItemOfficeUpload<T> extends StatefulWidget {
 
   final T source;
 
-  final Function deleteCallback;
-  final VoidCallback retryingCallback;
-  final UploadStatusController statusController;
+  final Function? deleteCallback;
+  final VoidCallback? retryingCallback;
+  final UploadStatusController? statusController;
 
   @override
   State<StatefulWidget> createState() {
@@ -59,12 +59,14 @@ class _ItemOfficeUploadState extends State<ItemOfficeUpload> {
             ),
           ),
           Visibility(
-            visible: !_shareWidget.viewOnly,
+            visible: !_shareWidget.viewOnly!,
             child: Positioned(
               right: 0,
               child: GestureDetector(
                 onTap: () {
-                  widget.deleteCallback();
+                  if (widget.deleteCallback != null) {
+                    widget.deleteCallback!();
+                  }
                 },
                 child: Container(
                   padding: EdgeInsets.all(4),

@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 class ImageGallery extends StatefulWidget {
 
   ImageGallery({
-    this.resources,
+    required this.resources,
     this.index = 0
   });
 

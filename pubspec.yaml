@@ -5,43 +5,43 @@ author:
 homepage:
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
   # 图片视频选择器
-  image_picker: ^0.6.3
+  image_picker: 1.0.4
 
   # 仿微信图片视频选择器
-  wechat_assets_picker: ^4.1.0
+  wechat_assets_picker: 8.7.1
 
   # 视频播放
   # flutter sdk版本不支持时应用不能编译 且没有错误信息
-  video_player: 0.10.12
+  video_player: 2.7.2
 
-  photo_view: ^0.9.2
+  photo_view: 0.14.0
 
   # 动态权限
-  permission_handler: 5.1.0+2
+  permission_handler: 11.0.1
 
   # http 请求库
-  dio: ^3.0.8
+  dio: 5.3.3
 
   # 屏幕旋转
-  auto_orientation: ^1.0.6
+  auto_orientation: 2.3.1
 
-  path_provider: 1.6.27
+  path_provider: 2.1.1
 
 #  # 本地Office文档预览
 #  flutter_filereader: 2.2.0
   # 本地应用打开文件
   # sdk<29 manifest添加tools:remove="android:requestLegacyExternalStorage"
-  open_file: 3.0.3
+  open_file: 3.3.2
 
-  flutter_image_compress: 0.7.0
-  video_compress: 2.1.1
+  flutter_image_compress: 2.0.2
+  video_compress: 3.1.2
 
 # 基本组件
 #  common:

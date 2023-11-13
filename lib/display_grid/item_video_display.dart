@@ -12,7 +12,7 @@ import 'package:video_player/video_player.dart';
 class ItemVideoDisplay extends StatefulWidget {
 
   ItemVideoDisplay({
-    this.entity
+    required this.entity
   });
 
   /// File or url
@@ -27,7 +27,7 @@ class ItemVideoDisplay extends StatefulWidget {
 
 class _ItemVideoDisplayState extends State<ItemVideoDisplay> {
 
-  VideoPlayerController _videoController;
+  late VideoPlayerController _videoController;
 
   @override
   void initState() {
@@ -131,9 +131,9 @@ class _ItemVideoDisplayState extends State<ItemVideoDisplay> {
   /// fileName为null 则获取路径文件名称
   String getFileName() {
     var entity = widget.entity;
-    if (entity != null) {
-      bool nameNotEmpty = entity.fileName != null && entity.fileName.isNotEmpty;
-      return nameNotEmpty ? entity.fileName : FileGalleryUtil.getFileName(entity.resource);
+    if (entity != null && entity.fileName != null) {
+      bool nameNotEmpty = entity.fileName != null && entity.fileName!.isNotEmpty;
+      return nameNotEmpty ? entity.fileName! : FileGalleryUtil.getFileName(entity.resource);
     }
     return '';
   }

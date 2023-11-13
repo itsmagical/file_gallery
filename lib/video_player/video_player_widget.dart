@@ -17,17 +17,17 @@ import 'package:video_player/video_player.dart';
 class VideoPlayerWidget extends StatefulWidget {
 
   VideoPlayerWidget.file({
-    @required File file
+    required File file
   }) : resource = file,
         videoLoadType = VideoLoadType.FILE;
 
   VideoPlayerWidget.url({
-    @required String url
+    required String url
   }) : resource = url,
         videoLoadType = VideoLoadType.URL;
 
   VideoPlayerWidget.asset({
-    @required String asset
+    required String asset
   }) : resource = asset,
         videoLoadType = VideoLoadType.ASSET;
 
@@ -45,11 +45,11 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   GlobalKey<VideoPlayerControlState> _key = GlobalKey<VideoPlayerControlState>();
 
-  VideoPlayerController _controller;
+  VideoPlayerController? _controller;
 
   bool isInit = false;
 
-  Function _playListener;
+  late VoidCallback _playListener;
 
   /// 是否为全屏
   bool get _isFullScreen => MediaQuery.of(context).orientation == Orientation.landscape;
@@ -72,8 +72,8 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
     if (_controller != null) {
       isInit = false;
-      _controller.removeListener(_playListener);
-      await _controller.dispose();
+      _controller!.removeListener(_playListener);
+      await _controller!.dispose();
       setState(() {
 
       });
@@ -82,13 +82,13 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     if (widget.videoLoadType == VideoLoadType.FILE) {
       _controller = VideoPlayerController.file(widget.resource);
     } else if (widget.videoLoadType ==  VideoLoadType.URL) {
-      _controller = VideoPlayerController.network(widget.resource);
+      _controller = VideoPlayerController.networkUrl(widget.resource);
     } else if (widget.videoLoadType ==  VideoLoadType.ASSET) {
       _controller = VideoPlayerController.asset(widget.resource);
     }
     _playListener = playListener;
-    _controller.addListener(_playListener);
-    _controller.initialize()
+    _controller!.addListener(_playListener);
+    _controller!.initialize()
         .then((value) {
           setState(() {
             isInit = true;
@@ -97,8 +97,8 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   }
 
   void playListener() async {
-    if(_controller.value.isPlaying) {
-      await _key.currentState.playListener();
+    if(_controller != null && _controller!.value.isPlaying) {
+      await _key.currentState?.playListener();
     }
   }
 
@@ -115,7 +115,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
       },
       child: VideoShareWidget(
         controlKey: _key,
-        controller: _controller,
+        controller: _controller!,
         child: Scaffold(
           body: Container(
             child: isInit ? Stack(
@@ -123,10 +123,10 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                 Container(
                   color: Color(0xFF333333),
                   child: Center(
-                      child: _controller.value.initialized
+                      child: _controller!.value.isInitialized
                           ? AspectRatio(
-                        aspectRatio: _controller.value.aspectRatio,
-                        child: VideoPlayer(_controller),
+                        aspectRatio: _controller!.value.aspectRatio,
+                        child: VideoPlayer(_controller!),
                       )
                           : Container()
                   ),
@@ -180,15 +180,16 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   void setPortraitAutoMode() {
     AutoOrientation.portraitAutoMode();
     /// 显示状态栏和底部导航栏
-    SystemChrome.setEnabledSystemUIOverlays(
-        [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
   }
 
   @override
   void dispose() {
     if (FileGalleryUtil.isNotNull(_controller)) {
-      _controller.removeListener(_playListener);
-      _controller.dispose();
+      _controller!.removeListener(_playListener);
+      _controller!.dispose();
     }
     super.dispose();
   }

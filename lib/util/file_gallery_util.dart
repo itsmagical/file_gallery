@@ -3,12 +3,12 @@ import 'dart:io';
 class FileGalleryUtil {
 
   /// @return true object is not null
-  static bool isNotNull(Object value) {
+  static bool isNotNull(Object? value) {
     return null != value;
   }
 
   /// @return true 集合不为空
-  static bool isNotEmpty(Iterable iterable) {
+  static bool isNotEmpty(Iterable? iterable) {
     return null != iterable && iterable.length > 0;
   }
 

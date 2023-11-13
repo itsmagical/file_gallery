@@ -16,7 +16,7 @@ import 'package:video_player/video_player.dart';
 class VideoPlayerControl extends StatefulWidget {
 
   VideoPlayerControl({
-    Key key
+    required Key key
   }) : super(key: key);
 
   @override
@@ -33,10 +33,10 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
 
   VideoPlayerController get _controller => VideoShareWidget.of(context).controller;
 
-  Timer timer;
+  late Timer timer;
 
   /// 是否已经播放完毕
-  bool _isPlayed;
+  late bool _isPlayed;
 
   /// 播放进度
   double progressValue = 0;
@@ -48,17 +48,17 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
   bool get _isFullScreen => MediaQuery.of(context).orientation == Orientation.landscape;
 
   Future playListener() async {
-    Duration position = await _controller.position;
-    Duration duration = _controller.value.duration;
-    if (duration == null) return;
+    Duration? position = await _controller?.position;
+    Duration? duration = _controller?.value.duration;
+    if (duration == null || position == null) return;
     if (position >= duration) {
       if (!_isPlayed) {
         _isPlayed = true;
         /// 移除监听
 //        _controller.removeListener(_playListener);
         debugPrint('play finished');
-        await _controller.seekTo(Duration.zero);
-        await _controller.pause();
+        await _controller?.seekTo(Duration.zero);
+        await _controller?.pause();
         debugPrint('reset...');
         /// 添加监听
 //        _controller.addListener(_playListener);
@@ -71,8 +71,8 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
     /// 进度条拖动时 不刷新进度
     if (isDragSlider) { return; }
 
-    if (_controller.value.isPlaying) {
-      Duration valuePosition = _controller.value.position;
+    if (_controller != null && _controller!.value.isPlaying) {
+      Duration valuePosition = _controller!.value.position;
       int positionMilliseconds = valuePosition.inMilliseconds;
       int durationMilliseconds = duration.inMilliseconds;
       if (positionMilliseconds > durationMilliseconds) {
@@ -236,7 +236,7 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
 
   /// 显示播放按钮
   /// @param isDelayDismiss 是否延迟隐藏
-  void showPlayButton({bool isDelayDismiss}) {
+  void showPlayButton({bool? isDelayDismiss}) {
     if (timer != null) {
       timer.cancel();
     }
@@ -260,12 +260,14 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
     if (_isFullScreen) {
       AutoOrientation.portraitAutoMode();
       /// 显示状态栏和底部导航栏
-      SystemChrome.setEnabledSystemUIOverlays(
-          [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+      SystemChrome.setEnabledSystemUIMode(
+          SystemUiMode.manual,
+          overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]
+      );
     } else {
       AutoOrientation.landscapeAutoMode();
       /// 隐藏状态栏和底部导航栏
-      SystemChrome.setEnabledSystemUIOverlays([]);
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     }
   }
 

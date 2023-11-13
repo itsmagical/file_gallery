@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 class FileDisplayGrid extends StatefulWidget {
 
   FileDisplayGrid({
-    this.entities,
+    required this.entities,
     this.columnCount = 4
   });
 

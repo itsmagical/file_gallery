@@ -2,7 +2,7 @@
 class FileDisplayEntity {
 
   FileDisplayEntity({
-    this.resource,
+    required this.resource,
     this.fileName
   });
 
@@ -11,6 +11,6 @@ class FileDisplayEntity {
 
   /// 文件名称
   /// null 则截取resource路径的文件名
-  String fileName;
+  String? fileName;
 
 }

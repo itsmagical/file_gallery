@@ -12,15 +12,15 @@ import 'package:photo_view/photo_view.dart';
 class ItemImageGallery extends StatefulWidget {
 
   ItemImageGallery.file({
-    @required File file
+    required File file
   }) : provider = FileImage(file);
 
   ItemImageGallery.url({
-    @required String url
+    required String url
   }) : provider = NetworkImage(url);
 
   ItemImageGallery.asset({
-    @required String asset
+    required String asset
   }) : provider = AssetImage(asset);
 
   final provider;
