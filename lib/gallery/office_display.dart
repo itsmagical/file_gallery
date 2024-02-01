@@ -1,10 +1,10 @@
 
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:file_gallery/util/file_gallery_util.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter_filereader/flutter_filereader.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -51,7 +51,15 @@ class _OfficeDisplayState extends State<OfficeDisplay> {
 
   /// 检查存储权限
   void checkPermission() async {
-    if (await Permission.storage.request().isGranted) {
+    if (Platform.isAndroid) {
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      var androidInfo = await deviceInfo.androidInfo;
+      if (androidInfo.version.sdkInt < 30) { /// android 11以下请求存储权限
+        bool isGranted = await Permission.storage.request().isGranted;
+        if (!isGranted) return;
+      }
+      displayFile();
+    } else {
       displayFile();
     }
   }
@@ -82,7 +90,7 @@ class _OfficeDisplayState extends State<OfficeDisplay> {
     }
   }
 
-  void openFile(String path) {
+  void openFile(String path) async {
     OpenFile.open(path).then((result) {
       if (result.type == ResultType.done) {
         Navigator.pop(context);
@@ -107,7 +115,7 @@ class _OfficeDisplayState extends State<OfficeDisplay> {
       return widget.resource as File;
     }
 
-    Directory directory = await getApplicationDocumentsDirectory();
+    Directory directory = await getStorageDirectory();
 
     String fileName = FileGalleryUtil.getFileName(widget.resource);
 
@@ -116,9 +124,15 @@ class _OfficeDisplayState extends State<OfficeDisplay> {
     return file;
   }
 
+  /// 存储路径
+  Future<Directory> getStorageDirectory() {
+    return getTemporaryDirectory();
+  }
+
   /// 下载
   void downloadFile(String url, String target) async {
-    Directory directory = await getApplicationDocumentsDirectory();
+    // Directory directory = await getApplicationDocumentsDirectory();
+    Directory directory = await getApplicationSupportDirectory();
     bool isExists = await directory.exists();
     if (!isExists) {
       directory.createSync();

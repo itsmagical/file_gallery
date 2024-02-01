@@ -42,6 +42,7 @@ dependencies:
 
   flutter_image_compress: 2.0.2
   video_compress: 3.1.2
+  device_info_plus: 9.1.2
 
 # 基本组件
 #  common:
