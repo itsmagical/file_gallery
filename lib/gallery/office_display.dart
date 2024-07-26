@@ -91,7 +91,8 @@ class _OfficeDisplayState extends State<OfficeDisplay> {
   }
 
   void openFile(String path) async {
-    OpenFile.open(path).then((result) {
+    String mimeType = FileGalleryUtil.getFileMimeType(path);
+    OpenFile.open(path, type: mimeType).then((result) {
       if (result.type == ResultType.done) {
         Navigator.pop(context);
       } else if (result.type == ResultType.noAppToOpen) {

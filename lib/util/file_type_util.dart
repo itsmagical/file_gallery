@@ -78,6 +78,7 @@ class FileTypeUtil {
             || extension == '.pptx'
             || extension == '.ppt'
             || extension == '.pdf'
+            || extension == '.zip'
             || extension == '.txt';
       }
     }

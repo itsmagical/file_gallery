@@ -56,10 +56,19 @@ class FileUploadItem {
       );
     }
 
-    return Container(
-      alignment: Alignment.center,
-      child: Text('不支持的类型'),
+    return ItemOfficeUpload(
+      resource,
+      retryingCallback: () {
+        addFileCallback.call(resource, this);
+      },
+      deleteCallback: () => deleteCallback(this),
+      statusController: statusController,
     );
+
+    // return Container(
+    //   alignment: Alignment.center,
+    //   child: Text('不支持的类型'),
+    // );
   }
 
 }
