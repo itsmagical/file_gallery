@@ -106,7 +106,7 @@ class _OfficeDisplayState extends State<OfficeDisplay> {
       return widget.resource as File;
     }
 
-    Directory directory = await getApplicationDocumentsDirectory();
+    Directory directory = await getStorageDirectory();
 
     String fileName = FileGalleryUtil.getFileName(widget.resource);
 
@@ -115,13 +115,13 @@ class _OfficeDisplayState extends State<OfficeDisplay> {
     return file;
   }
 
+  /// 存储路径
+  Future<Directory> getStorageDirectory() {
+    return getTemporaryDirectory();
+  }
+
   /// 下载
   void downloadFile(String url, String target) async {
-    Directory directory = await getApplicationDocumentsDirectory();
-    bool isExists = await directory.exists();
-    if (!isExists) {
-      directory.createSync();
-    }
     Dio().download(url, target)
     .then((response) async {
       File file = await getFileFromStorage();
