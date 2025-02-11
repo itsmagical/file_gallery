@@ -11,4 +11,7 @@ enum Menu {
 
   /// 视频相册
   VIDEO_GALLERY,
+
+  /// 文档
+  DOCUMENT,
 }

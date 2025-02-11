@@ -7,6 +7,7 @@ import 'package:file_gallery/upload/file_upload_share_widget.dart';
 import 'package:file_gallery/upload/menu.dart';
 import 'package:file_gallery/util/file_gallery_util.dart';
 import 'package:file_gallery/util/file_type_util.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -189,6 +190,15 @@ class _FileUploadGridState extends State<FileUploadGrid> {
           );
           break;
         }
+        case Menu.DOCUMENT: {
+          menuActions.add(
+              CupertinoActionSheetAction(
+                child: Text('文档'),
+                onPressed: () => openDocumentGallery(),
+              )
+          );
+          break;
+        }
       }
 
     });
@@ -268,6 +278,18 @@ class _FileUploadGridState extends State<FileUploadGrid> {
           }
         });
       }
+    }
+  }
+
+  openDocumentGallery() async {
+    Navigator.pop(context);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf'],
+    );
+    if (result != null) {
+      File file = File(result.files.single.path!);
+      addItem(file);
     }
   }
 
