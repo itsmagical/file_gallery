@@ -17,6 +17,9 @@ dependencies:
   # 仿微信图片视频选择器
   wechat_assets_picker: 8.7.1
 
+  # 文件选择器
+  file_picker: 8.0.0+1
+
   # 视频播放
   # flutter sdk版本不支持时应用不能编译 且没有错误信息
   video_player: 2.7.2
