@@ -12,41 +12,38 @@ dependencies:
     sdk: flutter
 
   # 图片视频选择器
-  image_picker: 1.0.4
+  image_picker: ^1.1.2
 
   # 仿微信图片视频选择器
-  wechat_assets_picker: 8.7.1
-
-  # 文件选择器
-  file_picker: 8.0.0+1
+  wechat_assets_picker: ^9.4.2
 
   # 视频播放
   # flutter sdk版本不支持时应用不能编译 且没有错误信息
-  video_player: 2.7.2
+  video_player: 2.9.2
 
-  photo_view: 0.14.0
+  photo_view: 0.15.0
 
   # 动态权限
-  permission_handler: 11.0.1
+  permission_handler: 11.3.1
 
   # http 请求库
-  dio: 5.3.3
+  dio: ^5.8.0+1
 
   # 屏幕旋转
   auto_orientation: 2.3.1
 
-  path_provider: 2.1.1
+  path_provider: 2.1.5
 
-#  # 本地Office文档预览
-#  flutter_filereader: 2.2.0
+  #  # 本地Office文档预览
+  #  flutter_filereader: 2.2.0
   # 本地应用打开文件
   # sdk<29 manifest添加tools:remove="android:requestLegacyExternalStorage"
-  open_file: 3.3.2
-
-  flutter_image_compress: 2.0.2
-  video_compress: 3.1.2
-  device_info_plus: 9.1.2
-
+  open_file: ^3.5.10
+  # 文件选择器
+  file_picker: 9.0.0
+  flutter_image_compress: ^2.4.0
+  video_compress: 3.1.4
+  device_info_plus: ^11.3.0
 # 基本组件
 #  common:
 #    git:
