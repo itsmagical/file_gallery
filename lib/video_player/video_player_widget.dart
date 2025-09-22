@@ -97,7 +97,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   }
 
   void playListener() async {
-    if(_controller != null && _controller!.value.isPlaying) {
+    if(_controller != null) {
       await _key.currentState?.playListener();
     }
   }

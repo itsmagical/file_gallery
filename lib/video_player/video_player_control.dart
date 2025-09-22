@@ -51,7 +51,7 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
     Duration? position = await _controller?.position;
     Duration? duration = _controller?.value.duration;
     if (duration == null || position == null) return;
-    if (position >= duration) {
+    if (_controller.value.isCompleted) {
       if (!_isPlayed) {
         _isPlayed = true;
         /// 移除监听
@@ -232,6 +232,9 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
       await _controller.play();
       _isPlayed = false;
     }
+    setState(() {
+
+    });
   }
 
   /// 显示播放按钮
