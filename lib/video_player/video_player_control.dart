@@ -33,7 +33,7 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
 
   VideoPlayerController get _controller => VideoShareWidget.of(context).controller;
 
-  late Timer timer;
+  Timer? timer;
 
   /// 是否已经播放完毕
   late bool _isPlayed;
@@ -51,7 +51,7 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
     Duration? position = await _controller?.position;
     Duration? duration = _controller?.value.duration;
     if (duration == null || position == null) return;
-    if (position >= duration) {
+    if (_controller.value.isCompleted) {
       if (!_isPlayed) {
         _isPlayed = true;
         /// 移除监听
@@ -232,13 +232,16 @@ class VideoPlayerControlState extends State<VideoPlayerControl> {
       await _controller.play();
       _isPlayed = false;
     }
+    setState(() {
+
+    });
   }
 
   /// 显示播放按钮
   /// @param isDelayDismiss 是否延迟隐藏
   void showPlayButton({bool? isDelayDismiss}) {
     if (timer != null) {
-      timer.cancel();
+      timer?.cancel();
     }
     setState(() {
       playButtonVisible = true;
