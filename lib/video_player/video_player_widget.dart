@@ -88,8 +88,10 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     }
     _playListener = playListener;
     _controller!.addListener(_playListener);
-    _controller!.initialize()
-        .then((value) {
+    _controller!.initialize().then((value) {
+      debugPrint('------rotationCorrection: ${_controller!.value.rotationCorrection}');
+      debugPrint('------width: ${_controller!.value.size.width}');
+      debugPrint('------height: ${_controller!.value.size.height}');
           setState(() {
             isInit = true;
           });
@@ -122,13 +124,15 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
               children: <Widget>[
                 Container(
                   color: Color(0xFF333333),
-                  child: Center(
-                      child: _controller!.value.isInitialized
-                          ? AspectRatio(
-                        aspectRatio: _controller!.value.aspectRatio,
-                        child: VideoPlayer(_controller!),
-                      )
-                          : Container()
+                  child: InteractiveViewer(
+                    child: Center(
+                        child: _controller!.value.isInitialized
+                            ? AspectRatio(
+                          aspectRatio: _controller!.value.aspectRatio,
+                          child: VideoPlayer(_controller!),
+                        )
+                            : Container()
+                    ),
                   ),
                 ),
                 VideoPlayerControl(
