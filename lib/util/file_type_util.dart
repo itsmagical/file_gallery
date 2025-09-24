@@ -54,6 +54,7 @@ class FileTypeUtil {
         return extension == '.mp4'
             || extension == '.rmvb'
             || extension == '.3gp'
+            || extension == '.mov'
             || extension == '.avi';
       }
     }

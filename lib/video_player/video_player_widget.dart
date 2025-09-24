@@ -82,7 +82,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     if (widget.videoLoadType == VideoLoadType.FILE) {
       _controller = VideoPlayerController.file(widget.resource);
     } else if (widget.videoLoadType ==  VideoLoadType.URL) {
-      _controller = VideoPlayerController.networkUrl(widget.resource);
+      _controller = VideoPlayerController.networkUrl(Uri.parse(widget.resource));
     } else if (widget.videoLoadType ==  VideoLoadType.ASSET) {
       _controller = VideoPlayerController.asset(widget.resource);
     }

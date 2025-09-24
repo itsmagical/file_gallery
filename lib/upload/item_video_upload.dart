@@ -49,7 +49,7 @@ class _ItemVideoUploadState extends State<ItemVideoUpload> {
       _videoController = VideoPlayerController.file(widget.source);
     } else if (widget.source is String) {
       if (isNetworkSource(widget.source))
-        _videoController = VideoPlayerController.networkUrl(widget.source);
+        _videoController = VideoPlayerController.networkUrl(Uri.parse(widget.source));
     }
     _videoController.initialize().then((value) {
       setState(() {
