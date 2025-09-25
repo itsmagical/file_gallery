@@ -121,15 +121,13 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
               children: <Widget>[
                 Container(
                   color: Color(0xFF333333),
-                  child: InteractiveViewer(
-                    child: Center(
-                        child: _controller!.value.isInitialized
-                            ? AspectRatio(
-                          aspectRatio: _controller!.value.aspectRatio,
-                          child: VideoPlayer(_controller!),
-                        )
-                            : Container()
-                    ),
+                  child: Center(
+                      child: _controller!.value.isInitialized
+                          ? AspectRatio(
+                        aspectRatio: _getAspectRatio(),
+                        child: VideoPlayer(_controller!),
+                      )
+                          : Container()
                   ),
                 ),
                 VideoPlayerControl(
@@ -153,6 +151,19 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         ),
       ),
     );
+  }
+
+  double _getAspectRatio() {
+    final videoValue = _controller!.value;
+    double finalAspectRatio = videoValue.aspectRatio;
+    // 如果视频需要旋转90度或270度（即竖屏视频）
+    if (videoValue.rotationCorrection == 90 || videoValue.rotationCorrection == 270) {
+      // 并且当前汇报的宽高比是横向的 (> 1.0)
+      if (finalAspectRatio > 1.0) {
+        finalAspectRatio = 1 / finalAspectRatio;
+      }
+    }
+    return finalAspectRatio;
   }
 
   Widget getAppBar() {
