@@ -82,14 +82,13 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     if (widget.videoLoadType == VideoLoadType.FILE) {
       _controller = VideoPlayerController.file(widget.resource);
     } else if (widget.videoLoadType ==  VideoLoadType.URL) {
-      _controller = VideoPlayerController.networkUrl(widget.resource);
+      _controller = VideoPlayerController.networkUrl(Uri.parse(widget.resource));
     } else if (widget.videoLoadType ==  VideoLoadType.ASSET) {
       _controller = VideoPlayerController.asset(widget.resource);
     }
     _playListener = playListener;
     _controller!.addListener(_playListener);
-    _controller!.initialize()
-        .then((value) {
+    _controller!.initialize().then((value) {
           setState(() {
             isInit = true;
           });
@@ -97,7 +96,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   }
 
   void playListener() async {
-    if(_controller != null && _controller!.value.isPlaying) {
+    if(_controller != null) {
       await _key.currentState?.playListener();
     }
   }
@@ -125,7 +124,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                   child: Center(
                       child: _controller!.value.isInitialized
                           ? AspectRatio(
-                        aspectRatio: _controller!.value.aspectRatio,
+                        aspectRatio: _getAspectRatio(),
                         child: VideoPlayer(_controller!),
                       )
                           : Container()
@@ -152,6 +151,22 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         ),
       ),
     );
+  }
+
+  double _getAspectRatio() {
+    final videoValue = _controller!.value;
+    double finalAspectRatio = videoValue.aspectRatio;
+
+    // 如果视频需要旋转90度或270度（即竖屏视频）
+    if (videoValue.rotationCorrection == 90 || videoValue.rotationCorrection == 270) {
+      // 并且当前汇报的宽高比是横向的 (> 1.0)
+      if (finalAspectRatio > 1.0) {
+        // 则将其反转
+        finalAspectRatio = 1 / finalAspectRatio;
+        print("宽高比通过 rotationCorrection 修正: 原始 = ${videoValue.aspectRatio}, 修正后 = $finalAspectRatio");
+      }
+    }
+    return finalAspectRatio;
   }
 
   Widget getAppBar() {

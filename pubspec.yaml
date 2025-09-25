@@ -19,7 +19,7 @@ dependencies:
 
   # 视频播放
   # flutter sdk版本不支持时应用不能编译 且没有错误信息
-  video_player: 2.9.2
+  video_player: 2.9.5
 
   photo_view: 0.15.0
 
