@@ -89,9 +89,6 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     _playListener = playListener;
     _controller!.addListener(_playListener);
     _controller!.initialize().then((value) {
-      debugPrint('------rotationCorrection: ${_controller!.value.rotationCorrection}');
-      debugPrint('------width: ${_controller!.value.size.width}');
-      debugPrint('------height: ${_controller!.value.size.height}');
           setState(() {
             isInit = true;
           });
