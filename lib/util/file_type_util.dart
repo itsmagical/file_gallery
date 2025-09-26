@@ -28,6 +28,7 @@ class FileTypeUtil {
       int index = resource.lastIndexOf('.');
       if (index > 0) {
         String extension = resource.substring(index);
+        extension = extension.toLowerCase();
         return extension == '.jpg'
             || extension == '.jpeg'
             || extension == '.png'
@@ -51,6 +52,7 @@ class FileTypeUtil {
       int index = resource.lastIndexOf('.');
       if (index > 0) {
         String extension = resource.substring(index);
+        extension = extension.toLowerCase();
         return extension == '.mp4'
             || extension == '.rmvb'
             || extension == '.3gp'
@@ -72,6 +74,7 @@ class FileTypeUtil {
       int index = resource.lastIndexOf('.');
       if (index > 0) {
         String extension = resource.substring(index);
+        extension = extension.toLowerCase();
         return extension == '.docx'
             || extension == '.doc'
             || extension == '.xlsx'
@@ -97,6 +100,7 @@ class FileTypeUtil {
       int index = resource.lastIndexOf('.');
       if (index > 0) {
         String extension = resource.substring(index);
+        extension = extension.toLowerCase();
         return extension == '.docx'
             || extension == '.doc';
       }
@@ -115,6 +119,7 @@ class FileTypeUtil {
       int index = resource.lastIndexOf('.');
       if (index > 0) {
         String extension = resource.substring(index);
+        extension = extension.toLowerCase();
         return extension == '.xlsx'
             || extension == '.xls';
       }
@@ -133,6 +138,7 @@ class FileTypeUtil {
       int index = resource.lastIndexOf('.');
       if (index > 0) {
         String extension = resource.substring(index);
+        extension = extension.toLowerCase();
         return extension == '.pptx'
             || extension == '.ppt';
       }
@@ -151,6 +157,7 @@ class FileTypeUtil {
       int index = resource.lastIndexOf('.');
       if (index > 0) {
         String extension = resource.substring(index);
+        extension = extension.toLowerCase();
         return extension == '.pdf';
       }
     }
@@ -168,6 +175,7 @@ class FileTypeUtil {
       int index = resource.lastIndexOf('.');
       if (index > 0) {
         String extension = resource.substring(index);
+        extension = extension.toLowerCase();
         return extension == '.txt';
       }
     }
