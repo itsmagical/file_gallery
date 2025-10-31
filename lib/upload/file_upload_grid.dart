@@ -227,7 +227,8 @@ class _FileUploadGridState extends State<FileUploadGrid> {
         context,
         pickerConfig: AssetPickerConfig(
           maxAssets: getMaxAssets(),
-          requestType: RequestType.image
+          requestType: RequestType.image,
+          textDelegate: AssetPickerTextDelegate(),
         )
       );
 
