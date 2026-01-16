@@ -11,6 +11,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 typedef OnAddFileCallback(File file, FileUploadItem item);
@@ -23,7 +24,6 @@ typedef OnDeleteFileCallback(FileUploadItem item);
 /// @author LiuHe
 /// @created at 2021/1/29 16:46
 class FileUploadGrid extends StatefulWidget {
-
   FileUploadGrid({
     required this.items,
     this.maxCount = 9,
@@ -40,12 +40,15 @@ class FileUploadGrid extends StatefulWidget {
 
   /// 最大上传数量
   final int maxCount;
+
   /// 每次选择本地资源的最大数量
   /// 不能超过maxCount
   final int maxAssets;
   final List<Menu>? menus;
+
   /// 禁用上传，仅支持查看已上传附件
   final bool viewOnly;
+
   /// 压缩
   final BaseCompress? compress;
   final OnAddFileCallback addFileCallback;
@@ -55,15 +58,14 @@ class FileUploadGrid extends StatefulWidget {
   State<StatefulWidget> createState() {
     return _FileUploadGridState(items, maxCount, this.menus);
   }
-
 }
 
 class _FileUploadGridState extends State<FileUploadGrid> {
-
   late List<CupertinoActionSheetAction> menuActions;
   late List<FileUploadItem> items;
 
-  _FileUploadGridState(List<FileUploadItem> items, int maxCount, List<Menu>? menus) {
+  _FileUploadGridState(
+      List<FileUploadItem> items, int maxCount, List<Menu>? menus) {
     this.items = FileGalleryUtil.isNotNull(items) ? items : [];
 
     /// 默认拍照和相册
@@ -71,12 +73,10 @@ class _FileUploadGridState extends State<FileUploadGrid> {
       menus = [Menu.IMAGE, Menu.IMAGE_GALLERY];
     }
     menuActions = getMenuActions(menus!);
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       child: FileUploadShareWidget(
         viewOnly: widget.viewOnly,
@@ -86,12 +86,13 @@ class _FileUploadGridState extends State<FileUploadGrid> {
             crossAxisCount: getCrossAxisCount(),
             mainAxisSpacing: 10,
             crossAxisSpacing: 10,
-  //              childAspectRatio: 1.7
+            //              childAspectRatio: 1.7
           ),
           itemBuilder: (context, position) {
             if (position < items.length) {
               FileUploadItem item = items[position];
-              return item.createItemWidget(widget.addFileCallback, removeItemCallback, position);
+              return item.createItemWidget(
+                  widget.addFileCallback, removeItemCallback, position);
             } else {
               return createAddImageItemWidget();
             }
@@ -145,62 +146,55 @@ class _FileUploadGridState extends State<FileUploadGrid> {
               onPressed: () => Navigator.pop(context, 'Cancel'),
             ),
           );
-        }
-    );
+        });
   }
 
   /// 菜单
   List<CupertinoActionSheetAction> getMenuActions(List<Menu> menus) {
     List<CupertinoActionSheetAction> menuActions = [];
     menus.forEach((menu) {
-      switch(menu) {
-        case Menu.IMAGE: {
-          menuActions.add(
-              CupertinoActionSheetAction(
-                child: Text('拍照'),
-                onPressed: () => openImageOrGallery(true),
-              )
-          );
-          break;
-        }
-        case Menu.IMAGE_GALLERY: {
-          menuActions.add(
-              CupertinoActionSheetAction(
-                child: Text('选择图片'),
-                onPressed: () => openImageOrGallery(false),
-              )
-          );
-          break;
-        }
-        case Menu.VIDEO: {
-          menuActions.add(
-              CupertinoActionSheetAction(
-                child: Text('拍视频'),
-                onPressed: () => openVideoOrGallery(true),
-              )
-          );
-          break;
-        }
-        case Menu.VIDEO_GALLERY: {
-          menuActions.add(
-              CupertinoActionSheetAction(
-                child: Text('选择视频'),
-                onPressed: () => openVideoOrGallery(false),
-              )
-          );
-          break;
-        }
-        case Menu.DOCUMENT: {
-          menuActions.add(
-              CupertinoActionSheetAction(
-                child: Text('文档'),
-                onPressed: () => openDocumentGallery(),
-              )
-          );
-          break;
-        }
+      switch (menu) {
+        case Menu.IMAGE:
+          {
+            menuActions.add(CupertinoActionSheetAction(
+              child: Text('拍照'),
+              onPressed: () => openImageOrGallery(true),
+            ));
+            break;
+          }
+        case Menu.IMAGE_GALLERY:
+          {
+            menuActions.add(CupertinoActionSheetAction(
+              child: Text('选择图片'),
+              onPressed: () => openImageOrGallery(false),
+            ));
+            break;
+          }
+        case Menu.VIDEO:
+          {
+            menuActions.add(CupertinoActionSheetAction(
+              child: Text('拍视频'),
+              onPressed: () => openVideoOrGallery(true),
+            ));
+            break;
+          }
+        case Menu.VIDEO_GALLERY:
+          {
+            menuActions.add(CupertinoActionSheetAction(
+              child: Text('选择视频'),
+              onPressed: () => openVideoOrGallery(false),
+            ));
+            break;
+          }
+        case Menu.DOCUMENT:
+          {
+            menuActions.add(CupertinoActionSheetAction(
+              child: Text('文档'),
+              onPressed: () => openDocumentGallery(),
+            ));
+            break;
+          }
       }
-
     });
     return menuActions;
   }
@@ -211,9 +205,7 @@ class _FileUploadGridState extends State<FileUploadGrid> {
 
     if (isCamera) {
       ImagePicker imagePicker = ImagePicker();
-      XFile? image = await imagePicker.pickImage(
-          source: ImageSource.camera
-      );
+      XFile? image = await imagePicker.pickImage(source: ImageSource.camera);
 
       // File image = await ImagePicker.pickImage(
       //     source: ImageSource.camera,
@@ -222,23 +214,35 @@ class _FileUploadGridState extends State<FileUploadGrid> {
         addItem(File(image!.path));
       }
     } else {
+      try {
+        List<AssetEntity>? assets = await AssetPicker.pickAssets(context,
+            pickerConfig: AssetPickerConfig(
+              maxAssets: getMaxAssets(),
+              requestType: RequestType.image,
+              textDelegate: AssetPickerTextDelegate(),
+            ));
 
-      List<AssetEntity>? assets = await AssetPicker.pickAssets(
-        context,
-        pickerConfig: AssetPickerConfig(
-          maxAssets: getMaxAssets(),
-          requestType: RequestType.image,
-          textDelegate: AssetPickerTextDelegate(),
-        )
-      );
-
-      if (FileGalleryUtil.isNotNull(assets)) {
-        assets!.forEach((asset) async {
-          File? image = await asset.file;
-          if (image != null) {
-            addItem(image);
-          }
-        });
+        if (FileGalleryUtil.isNotNull(assets)) {
+          assets!.forEach((asset) async {
+            File? image = await asset.file;
+            if (image != null) {
+              addItem(image);
+            }
+          });
+        }
+      } on StateError catch (e) {
+        // 权限被拒绝时，提示用户
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('请在系统设置中允许访问相册权限'),
+              action: SnackBarAction(
+                label: '去设置',
+                onPressed: () => openAppSettings(),
+              ),
+            ),
+          );
+        }
       }
     }
   }
@@ -256,28 +260,40 @@ class _FileUploadGridState extends State<FileUploadGrid> {
     if (isCamera) {
       ImagePicker imagePicker = ImagePicker();
       XFile? video = await imagePicker.pickVideo(
-        source: ImageSource.camera,
-        maxDuration: widget.compress?.getVideoDuration()
-      );
+          source: ImageSource.camera,
+          maxDuration: widget.compress?.getVideoDuration());
       if (FileGalleryUtil.isNotNull(video)) {
         addItem(File(video!.path));
       }
     } else {
-      List<AssetEntity>? assets = await AssetPicker.pickAssets(
+      try {
+        List<AssetEntity>? assets = await AssetPicker.pickAssets(
           context,
           pickerConfig: AssetPickerConfig(
-              maxAssets: widget.maxCount,
-              requestType: RequestType.video
-          ),
-      );
+              maxAssets: widget.maxCount, requestType: RequestType.video),
+        );
 
-      if (FileGalleryUtil.isNotNull(assets)) {
-        assets!.forEach((asset) async {
-          File? video = await asset.file;
-          if (video != null) {
-            addItem(video);
-          }
-        });
+        if (FileGalleryUtil.isNotNull(assets)) {
+          assets!.forEach((asset) async {
+            File? video = await asset.file;
+            if (video != null) {
+              addItem(video);
+            }
+          });
+        }
+      } on StateError catch (e) {
+        // 权限被拒绝时，提示用户
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('请在系统设置中允许访问相册权限'),
+              action: SnackBarAction(
+                label: '去设置',
+                onPressed: () => openAppSettings(),
+              ),
+            ),
+          );
+        }
       }
     }
   }
@@ -325,10 +341,6 @@ class _FileUploadGridState extends State<FileUploadGrid> {
   void removeItem(FileUploadItem item) {
     items.remove(item);
     widget.deleteFileCallback(item);
-    setState(() {
-
-    });
-
+    setState(() {});
   }
-
 }
