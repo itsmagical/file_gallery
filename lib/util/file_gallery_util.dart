@@ -12,28 +12,36 @@ class FileGalleryUtil {
     return null != iterable && iterable.length > 0;
   }
 
-  /// 根据File or url获取文件名
-  static String getFileName(dynamic resource) {
-
+  /// 过滤 URL 中的 Query 参数（?）与锚点（#）
+  static String _cleanPath(dynamic resource) {
     String path = '';
-
     if (resource is File) {
       path = resource.path;
-    }
-
-    if (resource is String) {
+    } else if (resource is String) {
       path = resource;
-      int index = path.lastIndexOf('/');
-      if (index > 0) {
-        return path.substring(index + 1);
-      }
     }
+    if (path.contains('?')) {
+      path = path.split('?').first;
+    }
+    if (path.contains('#')) {
+      path = path.split('#').first;
+    }
+    return path;
+  }
 
+  /// 根据File or url获取文件名
+  static String getFileName(dynamic resource) {
+    String path = _cleanPath(resource);
+    int index = path.lastIndexOf('/');
+    if (index >= 0) {
+      return path.substring(index + 1);
+    }
     return path;
   }
 
   static String getFileMimeType(String filePath) {
-    List<String> fileStrs = filePath.split("\.");
+    String path = _cleanPath(filePath);
+    List<String> fileStrs = path.split("\.");
     String fileTypeStr = fileStrs[fileStrs.length - 1].toLowerCase();
     switch (fileTypeStr) {
       case "3gp":
