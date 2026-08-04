@@ -64,7 +64,28 @@ class _OfficeDisplayState extends State<OfficeDisplay> {
     }
   }
 
-  /// 预览本地文件，不存在则下载
+  /// 判断是否为纯文本类文件（纯文本文件内容较少时可能小于 1KB）
+  bool _isTextFile(String filePath) {
+    String path = FileGalleryUtil.getFileName(filePath).toLowerCase();
+    return path.endsWith('.txt') ||
+        path.endsWith('.csv') ||
+        path.endsWith('.log') ||
+        path.endsWith('.json') ||
+        path.endsWith('.xml');
+  }
+
+  /// 校验文件是否为需要清理的无效/损坏缓存
+  bool _isInvalidCacheFile(File file, int fileSize) {
+    if (widget.resource is! String) return false;
+    if (_isTextFile(file.path)) {
+      // 纯文本文件只判定 0 字节为空文件坏缓存
+      return fileSize == 0;
+    }
+    // Office / PDF 等二进制文档小于 1KB 视为损坏/报错缓存
+    return fileSize < 1024;
+  }
+
+  /// 预览本地文件，不存在或损坏则下载
   void displayFile() async {
     if (widget.resource is File) {
       File file = widget.resource;
@@ -77,6 +98,18 @@ class _OfficeDisplayState extends State<OfficeDisplay> {
     }
     File file = await getFileFromStorage();
     if (await file.exists()) {
+      int fileSize = await file.length();
+      // 小于 1KB 且非文本类的网络下载文件，视为损坏缓存并清理重新下载
+      if (_isInvalidCacheFile(file, fileSize)) {
+        try {
+          await file.delete();
+        } catch (e) {
+          debugPrint('删除损坏缓存文件失败: $e');
+        }
+        downloadFile(widget.resource, file.path);
+        return;
+      }
+
       setState(() {
         loadingStatus = 0;
         filePath = file.path;
@@ -141,20 +174,35 @@ class _OfficeDisplayState extends State<OfficeDisplay> {
     Dio().download(url, target)
     .then((response) async {
       File file = await getFileFromStorage();
-      if (await file.exists()) {
+      int fileSize = await file.exists() ? await file.length() : 0;
+      if (await file.exists() && !_isInvalidCacheFile(file, fileSize)) {
         loadingStatus = 0;
         filePath = file.path;
         if (filePath != null)
         openFile(filePath!);
       } else {
+        // 下载下来的文件属于无效文件，进行清理
+        if (await file.exists()) {
+          try {
+            await file.delete();
+          } catch (_) {}
+        }
         loadingStatus = 2;
       }
-    }).catchError((error) {
+    }).catchError((error) async {
+      File file = await getFileFromStorage();
+      if (await file.exists()) {
+        try {
+          await file.delete();
+        } catch (_) {}
+      }
       loadingStatus = 2;
     }).whenComplete(() {
-      setState(() {
+      if (mounted) {
+        setState(() {
 
-      });
+        });
+      }
     });
   }
 
