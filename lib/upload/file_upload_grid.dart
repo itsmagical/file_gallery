@@ -300,13 +300,13 @@ class _FileUploadGridState extends State<FileUploadGrid> {
 
   openDocumentGallery() async {
     Navigator.pop(context);
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    final PlatformFile? picked = await FilePicker.pickFile(
       type: FileType.custom,
       allowedExtensions: ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf'],
     );
-    if (result != null) {
-      File file = File(result.files.single.path!);
-      addItem(file);
+    final path = picked?.path;
+    if (path != null) {
+      addItem(File(path));
     }
   }
 

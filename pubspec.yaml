@@ -5,7 +5,8 @@ author:
 homepage:
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
+  sdk: ">=3.10.0 <4.0.0"
+  flutter: ">=3.38.0"
 
 dependencies:
   flutter:
@@ -17,8 +18,8 @@ dependencies:
   # 仿微信图片视频选择器
   wechat_assets_picker: 9.8.0
 
-  # 文件选择器
-  file_picker: ^10.3.3
+  # 文件选择器。13.1.0 起 iOS 适配 UIScene，10.x 选文件弹不出来
+  file_picker: ^13.1.0
 
   # 视频播放
   # flutter sdk版本不支持时应用不能编译 且没有错误信息
@@ -45,7 +46,7 @@ dependencies:
 
   flutter_image_compress: 2.4.0
   video_compress: 3.1.4
-  device_info_plus: 12.2.0
+  device_info_plus: ^13.3.0
 
 # 基本组件
 #  common:
