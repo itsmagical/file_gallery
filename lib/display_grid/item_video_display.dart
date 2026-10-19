@@ -36,7 +36,7 @@ class _ItemVideoDisplayState extends State<ItemVideoDisplay> {
       _videoController = VideoPlayerController.file(resource);
     } else if (resource is String) {
       if (isNetworkSource(resource))
-        _videoController = VideoPlayerController.network(resource);
+        _videoController = VideoPlayerController.networkUrl(Uri.parse(resource));
     }
     _videoController.initialize().then((value) {
       setState(() {
